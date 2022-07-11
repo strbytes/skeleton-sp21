@@ -159,6 +159,27 @@ public class Model extends Observable {
         return false;
     }
 
+    public static boolean atLeastOneForTile(Board b, Tile t) {
+        int[] testDirs = {-1, 1};
+        for (int d : testDirs) {
+            int newCol = t.col() + d;
+            if (newCol >= 0 && newCol < b.size()) {
+                Tile testTile = b.tile(newCol, t.row());
+                if (testTile == null || testTile.value() == t.value()) {
+                    return true;
+                }
+            }
+            int newRow = t.row() + d;
+            if (newRow >= 0 && newRow < b.size()) {
+                Tile testTile = b.tile(t.col(), newRow);
+                if (testTile == null || testTile.value() == t.value()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * Returns true if there are any valid moves on the board.
      * There are two ways that there can be valid moves:
@@ -166,7 +187,11 @@ public class Model extends Observable {
      * 2. There are two adjacent tiles with the same value.
      */
     public static boolean atLeastOneMoveExists(Board b) {
-        // TODO: Fill in this function.
+        for (Tile t: b) {
+            if (t == null || atLeastOneForTile(b, t)) {
+                return true;
+            }
+        }
         return false;
     }
 
