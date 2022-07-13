@@ -107,16 +107,68 @@ public class Model extends Observable {
      *    and the trailing tile does not.
      * */
     public boolean tilt(Side side) {
-        boolean changed;
-        changed = false;
-
-        // TODO: Modify this.board (and perhaps this.score) to account
-        // for the tilt to the Side SIDE. If the board changed, set the
-        // changed local variable to true.
+        boolean changed = false;
+        board.setViewingPerspective(side);
+        // Tilt each column separately.
+        for (int tiltCol = 0; tiltCol < board.size(); tiltCol++){
+            if (tiltColumn(tiltCol)) {
+                changed = true;
+            }
+        }
+        // Set view perspective back.
+        board.setViewingPerspective(Side.NORTH);
 
         checkGameOver();
         if (changed) {
             setChanged();
+        }
+        return changed;
+    }
+
+    /** Helper for tilt. Has all the properties of tilt but only processes one column at a time.
+     * @param tiltCol - Column to be tilted.
+     * @return changed - Whether the board has been changed by a tilt.
+     */
+    public boolean tiltColumn(int tiltCol) {
+        boolean changed = false;
+        // Keep track of merges to prevent re-merging a tile.
+        boolean[] merged = {false, false, false, false};
+        // Start at "top", skip first row.
+        for (int tiltRow = board.size() - 2; tiltRow >= 0;  tiltRow--) {
+            Tile t = board.tile(tiltCol, tiltRow);
+            if (t == null) {
+                continue;
+            }
+            // Find which tile to move to.
+            for (int moveRow = tiltRow + 1; moveRow < board.size(); moveRow++) {
+                Tile moveTile = board.tile(tiltCol, moveRow);
+                if (moveTile == null) {
+                    // Move if last tile is empty.
+                    if (moveRow == board.size() - 1) {
+                        board.move(tiltCol, moveRow, t);
+                        changed = true;
+                    }
+                    // Else, keep looking.
+                    continue;
+                }
+                if (moveTile.value() == t.value() && !merged[moveRow]) {
+                    // Move to tile if values match and tile not already merged.
+                    merged[moveRow] = board.move(tiltCol, moveRow, t);
+                    // Update score on merge.
+                    score += moveTile.value() * 2;
+                    changed = true;
+                    break;
+                } else if (board.tile(tiltCol, moveRow - 1) != t){
+                    // If a tile exists and values don't match, move to tile below
+                    // as long as it's not to itself.
+                    board.move(tiltCol, moveRow - 1, t);
+                    changed = true;
+                    break;
+                } else {
+                    // Tile is blocked.
+                    break;
+                }
+            }
         }
         return changed;
     }
