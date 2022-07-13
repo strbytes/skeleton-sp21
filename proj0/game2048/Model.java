@@ -5,7 +5,7 @@ import java.util.Observable;
 
 
 /** The state of a game of 2048.
- *  @author TODO: YOUR NAME HERE
+ *  @author strbytes
  */
 public class Model extends Observable {
     /** Current contents of the board. */
@@ -110,7 +110,7 @@ public class Model extends Observable {
         boolean changed = false;
         board.setViewingPerspective(side);
         // Tilt each column separately.
-        for (int tiltCol = 0; tiltCol < board.size(); tiltCol++){
+        for (int tiltCol = 0; tiltCol < board.size(); tiltCol++) {
             if (tiltColumn(tiltCol)) {
                 changed = true;
             }
@@ -158,7 +158,7 @@ public class Model extends Observable {
                     score += moveTile.value() * 2;
                     changed = true;
                     break;
-                } else if (board.tile(tiltCol, moveRow - 1) != t){
+                } else if (board.tile(tiltCol, moveRow - 1) != t) {
                     // If a tile exists and values don't match, move to tile below
                     // as long as it's not to itself.
                     board.move(tiltCol, moveRow - 1, t);
