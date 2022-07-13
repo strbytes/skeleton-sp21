@@ -239,8 +239,11 @@ public class Model extends Observable {
      * 2. There are two adjacent tiles with the same value.
      */
     public static boolean atLeastOneMoveExists(Board b) {
+        if (emptySpaceExists(b)) {
+            return true;
+        }
         for (Tile t: b) {
-            if (t == null || atLeastOneForTile(b, t)) {
+            if (atLeastOneForTile(b, t)) {
                 return true;
             }
         }
