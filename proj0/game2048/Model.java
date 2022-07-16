@@ -129,7 +129,7 @@ public class Model extends Observable {
      * @param tiltCol - Column to be tilted.
      * @return changed - Whether the board has been changed by a tilt.
      */
-    public boolean tiltColumn(int tiltCol) {
+    private boolean tiltColumn(int tiltCol) {
         boolean changed = false;
         // Keep track of merges to prevent re-merging a tile.
         boolean[] merged = {false, false, false, false};
@@ -211,7 +211,7 @@ public class Model extends Observable {
         return false;
     }
 
-    public static boolean atLeastOneForTile(Board b, Tile t) {
+    private static boolean atLeastOneForTile(Board b, Tile t) {
         int[] testDirs = {-1, 1};
         for (int d : testDirs) {
             int newCol = t.col() + d;
