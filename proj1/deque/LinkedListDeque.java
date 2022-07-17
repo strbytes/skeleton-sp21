@@ -50,6 +50,24 @@ public class LinkedListDeque<T> {
         System.out.println(this);
     }
 
+    public T removeFirst() {
+        if (size == 0) { return null; }
+        T item = sentinel.next.val;
+        sentinel.next = sentinel.next.next;
+        sentinel.next.prev = sentinel;
+        size -= 1;
+        return item;
+    }
+
+    public T removeLast() {
+        if (size == 0) { return null; }
+        T item = sentinel.prev.val;
+        sentinel.prev = sentinel.prev.prev;
+        sentinel.prev.next = sentinel;
+        size -= 1;
+        return item;
+    }
+
     public String toString() {
         Node pos = sentinel.next;
         String str = "";
