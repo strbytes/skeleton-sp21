@@ -31,6 +31,7 @@ public class LinkedListDequeTest {
 
 		System.out.println("Printing out deque: ");
 		lld1.printDeque();
+        assertEquals("front middle back", lld1.toString());
     }
 
     @Test

@@ -47,11 +47,16 @@ public class LinkedListDeque<T> {
     }
 
     public void printDeque() {
+        System.out.println(this);
+    }
+
+    public String toString() {
         Node pos = sentinel.next;
+        String str = "";
         while (pos.next != sentinel) {
-            System.out.print(pos.val + " ");
+            str += pos.val + " ";
             pos = pos.next;
         }
-        System.out.println(pos.val);
+        return str + pos.val;
     }
 }
