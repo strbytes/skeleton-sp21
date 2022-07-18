@@ -71,6 +71,33 @@ public class LinkedListDeque<T> {
         return null;
     }
 
+    /** Private recursive implementation of get.
+     * @param i Index of node to access, relative to current position.
+     * @param lst The current node in the list.
+     * @param stnl The sentinel node, used as list terminus.
+     * @return The value of the node at index 0.
+     */
+    private T getRecursive(int i, Node lst, Node stnl) {
+        if (lst == stnl) {
+            return null;
+        } else if (i == 0) {
+            return lst.val;
+        } else {
+            return getRecursive(i - 1, lst.next, stnl);
+        }
+    }
+
+    /** Public access to the recursive implementation of get.
+     * @param i Index of node value to be accessed.
+     * @return The value of the node at index i. Null if i is out of bounds.
+     */
+    public T getRecursive(int i) {
+        if (i >= size) {
+            return null;
+        }
+        return getRecursive(i, sentinel.next, sentinel);
+    }
+
     /** Evaluates whether the deque is empty or now.
      * @return Boolean of whether the deque is empty or not.
      */
