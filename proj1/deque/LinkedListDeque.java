@@ -1,22 +1,36 @@
 package deque;
 
-/** Linked list implementation of a deque. */
+/** Linked list implementation of a deque.
+ * @author Str Bytes */
 public class LinkedListDeque<T> {
-    private Node sentinel;
+    /** Sentinel node provides access to the underlying data structure and
+     * acts as the list terminator.
+     */
+    private final Node sentinel;
+    /** Integer representation of the number of elements in the deque. */
     private int size;
-    /** Dually-linked list data structure */
+    /** Dually-linked list data structure. */
     private class Node {
+        /** The value stored in the node. */
         public T val;
-        public Node next;
+        /** A reference to the previous node in the deque. */
         public Node prev;
+        /** A reference to the next node in the deque. */
+        public Node next;
 
-        public Node(T item, Node p, Node n) {
+        /** Construct a single dually-linked list node.
+         * @param item The value stored in the node.
+         * @param p A reference to the previous node in the deque.
+         * @param n A reference to the next node in the deque.
+         */
+        Node(T item, Node p, Node n) {
             val = item;
             prev = p;
             next = n;
         }
     }
 
+    /** Constructs an empty deque. */
     public LinkedListDeque() {
         sentinel = new Node(null, null, null);
         sentinel.prev = sentinel;
@@ -24,6 +38,8 @@ public class LinkedListDeque<T> {
         size = 0;
     }
 
+    /** Add a single item to the front of the deque.
+     * @param item Value to add to the deque. */
     public void addFirst(T item) {
         Node temp = sentinel.next;
         sentinel.next = new Node(item, sentinel, sentinel.next);
@@ -31,6 +47,8 @@ public class LinkedListDeque<T> {
         size += 1;
     }
 
+    /** Add a single item to the end of the deque.
+     * @param item Value to add to the deque. */
     public void addLast(T item) {
         Node temp = sentinel.prev;
         sentinel.prev = new Node(item, sentinel.prev, sentinel);
@@ -38,30 +56,46 @@ public class LinkedListDeque<T> {
         size += 1;
     }
 
+    /** Return the value stored at deque index i.
+     * @param i Index of the value to be retrieved. */
     public T get(int i) {
         Node lst = sentinel.next;
-        while (lst != sentinel && i < size) {   // short-circuit if index is out of bounds
-            if (i == 0) return lst.val;
+        /* Don't evaluate deque items if the index is out of bounds. */
+        while (lst != sentinel && i < size) {
+            if (i == 0) {
+                return lst.val;
+            }
             lst = lst.next;
             i--;
         }
         return null;
     }
 
+    /** Evaluates whether the deque is empty or now.
+     * @return Boolean of whether the deque is empty or not.
+     */
     public boolean isEmpty() {
         return size == 0;
     }
 
+    /** Evaluate the number of elements in the deque.
+     * @return Integer representation of the number of elements in the deque.
+     */
     public int size() {
         return size;
     }
 
+    /** Prints the contents of the deque to the console. */
     public void printDeque() {
         System.out.println(this);
     }
 
+    /** Remove a single item to the front of the deque.
+     * @return The value of the deque item being removed. */
     public T removeFirst() {
-        if (size == 0) { return null; }
+        if (size == 0) {
+            return null;
+        }
         T item = sentinel.next.val;
         sentinel.next = sentinel.next.next;
         sentinel.next.prev = sentinel;
@@ -69,8 +103,12 @@ public class LinkedListDeque<T> {
         return item;
     }
 
+    /** Remove a single item to the end of the deque.
+     * @return The value of the deque item being removed. */
     public T removeLast() {
-        if (size == 0) { return null; }
+        if (size == 0) {
+            return null;
+        }
         T item = sentinel.prev.val;
         sentinel.prev = sentinel.prev.prev;
         sentinel.prev.next = sentinel;
@@ -78,6 +116,9 @@ public class LinkedListDeque<T> {
         return item;
     }
 
+    /** Constructs a string representation of the values in the deque.
+     * @return A string representation of the values in the deque.
+     */
     public String toString() {
         Node pos = sentinel.next;
         String str = "";
