@@ -38,6 +38,16 @@ public class LinkedListDeque<T> {
         size += 1;
     }
 
+    public T get(int i) {
+        Node lst = sentinel.next;
+        while (lst != sentinel && i < size) {   // short-circuit if index is out of bounds
+            if (i == 0) return lst.val;
+            lst = lst.next;
+            i--;
+        }
+        return null;
+    }
+
     public boolean isEmpty() {
         return size == 0;
     }
