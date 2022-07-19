@@ -103,7 +103,9 @@ public class ArrayDeque<T> {
      * @return The value of the item removed from the deque.
      */
     public T removeFirst() {
-        if (size <= items.length * 0.25 && items.length > 8) {
+        if (size == 0) {
+            return null;
+        } else if (size <= items.length * 0.25 && items.length > 8) {
             resize(items.length / 2);
         }
         first = Math.floorMod((first + 1), items.length);
@@ -118,7 +120,9 @@ public class ArrayDeque<T> {
      * @return The value of the item removed from the deque.
      */
     public T removeLast() {
-        if (size <= items.length * 0.25 && items.length > 8) {
+        if (size == 0) {
+            return null;
+        } else if (size <= items.length * 0.25 && items.length > 8) {
             resize(items.length / 2);
         }
         last = Math.floorMod((last - 1), items.length);

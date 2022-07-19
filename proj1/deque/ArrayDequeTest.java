@@ -108,6 +108,15 @@ public class ArrayDequeTest {
 	}
 
 	@Test
+	public void removeEmptyTest() {
+		ArrayDeque<Integer> arrayD = new ArrayDeque<Integer>();
+		assertEquals(null, arrayD.removeFirst());
+		assertEquals(0, arrayD.size());
+		assertEquals(null, arrayD.removeLast());
+		assertEquals(0, arrayD.size());
+	}
+
+	@Test
 	public void largeResizeTest() {
 		ArrayDeque<Integer> arrayD = new ArrayDeque<Integer>();
 		for (int i = 0; i < 1048576; i++) {
