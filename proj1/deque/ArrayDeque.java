@@ -75,4 +75,26 @@ public class ArrayDeque<T> {
         }
         return str;
     }
+
+    public T removeFirst() {
+        if (size <= items.length * 0.25 && items.length > 8) {
+            resize(items.length / 2);
+        }
+        first = Math.floorMod((first + 1), items.length);
+        T val = items[first];
+        items[first] = null;
+        size -= 1;
+        return val;
+    }
+
+    public T removeLast() {
+        if (size <= items.length * 0.25 && items.length > 8) {
+            resize(items.length / 2);
+        }
+        last = Math.floorMod((last - 1), items.length);
+        T val = items[last];
+        items[last] = null;
+        size -= 1;
+        return val;
+    }
 }

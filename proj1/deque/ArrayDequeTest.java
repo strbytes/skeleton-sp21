@@ -62,6 +62,66 @@ public class ArrayDequeTest {
 		assertEquals(31, array2.get(31), 0);
 	}
 
+
+	@Test
+	/** Adds an item, then removes an item, and ensures that dll is empty afterwards. */
+	public void addRemoveTest() {
+		ArrayDeque<Integer> arrayD = new ArrayDeque<Integer>();
+		// should be empty
+		assertTrue("arrayD should be empty upon initialization", arrayD.isEmpty());
+
+		arrayD.addFirst(10);
+		// should not be empty
+		assertFalse("arrayD should contain 1 item", arrayD.isEmpty());
+
+		assertEquals(10,  arrayD.removeFirst(), 0);
+		// should be empty
+		assertTrue("arrayD should be empty after removal", arrayD.isEmpty());
+
+		arrayD.addLast(10);
+		// should not be empty
+		assertFalse("arrayD should contain 1 item", arrayD.isEmpty());
+
+		assertEquals(10, arrayD.removeLast(), 0);
+		// should be empty
+		assertTrue("arrayD should be empty after removal", arrayD.isEmpty());
+	}
+
+	@Test
+	public void addRemoveResizeTest() {
+		ArrayDeque<Integer> arrayD = new ArrayDeque<Integer>();
+		for (int i = 0; i < 32; i++) {
+			arrayD.addLast(i);
+		}
+		for (int i = 0; i < 32; i++) {
+			arrayD.removeLast();
+		}
+		assertTrue(arrayD.isEmpty());
+
+		for (int i = 0; i < 32; i++) {
+			arrayD.addFirst(i);
+		}
+		for (int i = 0; i < 32; i++) {
+			arrayD.removeFirst();
+		}
+		assertTrue(arrayD.isEmpty());
+	}
+
+	@Test
+	public void largeResizeTest() {
+		ArrayDeque<Integer> arrayD = new ArrayDeque<Integer>();
+		for (int i = 0; i < 1048576; i++) {
+			arrayD.addLast(i);
+		}
+		assertEquals(1048575, arrayD.get(arrayD.size() - 1), 0);
+		assertEquals(1048576, arrayD.size());
+
+		for (int i = 0; i < 1048576; i++) {
+			arrayD.removeLast();
+		}
+		assertEquals(0, arrayD.size());
+	}
+
 	@Test
 	public void getTest() {
 		ArrayDeque<Integer> test = new ArrayDeque<>();
