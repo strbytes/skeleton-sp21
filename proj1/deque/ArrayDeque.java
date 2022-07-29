@@ -76,6 +76,15 @@ public class ArrayDeque<T> {
         return size == 0;
     }
 
+    /** Construct an ArrayDeque from a list of arguments */
+    public static <T> ArrayDeque<T> of(T... args) {
+        ArrayDeque<T> deque = new ArrayDeque<>();
+        for (T arg: args) {
+            deque.addLast(arg);
+        }
+        return deque;
+    }
+
     /** Print a string representation of the deque. */
     public void printDeque() {
         System.out.println(this.toString());

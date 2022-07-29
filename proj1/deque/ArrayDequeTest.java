@@ -143,4 +143,13 @@ public class ArrayDequeTest {
 			assertEquals(i, test.get(i), 0);
 		}
 	}
+
+	@Test
+	public void ofTest() {
+		ArrayDeque<Integer> test = ArrayDeque.of(0, 1, 2, 3, 4);
+		assertEquals(5, test.size());
+		for (int i = 0; i < test.size(); i++) {
+			assertEquals(i, test.get(i), 0);
+		}
+	}
 }
