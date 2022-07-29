@@ -10,7 +10,9 @@ public class DequeEqualsTest {
         LinkedListDeque<Integer> LinkedListDeque2 = LinkedListDeque.of(0, 1, 2);
         LinkedListDeque<Integer> LinkedListDeque3 = LinkedListDeque.of(1, 1, 2);
         LinkedListDeque<String> LinkedListDeque4 = LinkedListDeque.of("one", "two", "three");
+        LinkedListDeque<String> LinkedListDeque5 = LinkedListDeque.of("one", "two", "three");
 
+        assertEquals(LinkedListDeque4, LinkedListDeque5);
         assertEquals(LinkedListDeque1, LinkedListDeque2);
         assertNotEquals(LinkedListDeque1, LinkedListDeque3);
         assertNotEquals(LinkedListDeque2, LinkedListDeque4);
@@ -22,8 +24,10 @@ public class DequeEqualsTest {
         ArrayDeque<Integer> ArrayDeque2 = ArrayDeque.of(0, 1, 2);
         ArrayDeque<Integer> ArrayDeque3 = ArrayDeque.of(1, 1, 2);
         ArrayDeque<String> ArrayDeque4 = ArrayDeque.of("one", "two", "three");
+        ArrayDeque<String> ArrayDeque5 = ArrayDeque.of("one", "two", "three");
 
         assertEquals(ArrayDeque1, ArrayDeque2);
+        assertEquals(ArrayDeque4, ArrayDeque5);
         assertNotEquals(ArrayDeque1, ArrayDeque3);
         assertNotEquals(ArrayDeque2, ArrayDeque4);
     }
