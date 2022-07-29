@@ -5,7 +5,7 @@ package deque;
  * @author Str Bytes
  * @param <T> Type of data to be stored in the deque.
  */
-public class ArrayDeque<T> {
+public class ArrayDeque<T> implements Deque<T> {
     /** The array used to implement the deque. */
     private T[] items;
     /** Integer representation of the size of the deque. */
@@ -39,6 +39,7 @@ public class ArrayDeque<T> {
      *
      * @param item The item to be added to the deque.
      */
+    @Override
     public void addFirst(T item) {
         if (size == items.length) {
             resize(items.length * 2);
@@ -52,6 +53,7 @@ public class ArrayDeque<T> {
      *
      * @param item The item to be added to the deque.
      */
+    @Override
     public void addLast(T item) {
         if (size == items.length) {
             resize(items.length * 2);
@@ -66,14 +68,10 @@ public class ArrayDeque<T> {
      * @param i The index of the value to be retrieved.
      * @return Returns the value held at index i of the deque.
      */
+    @Override
     public T get(int i) {
         assert (i < size);
         return items[(first + 1 + i) % items.length];
-    }
-
-    /** Returns whether the deque is empty or not. */
-    public boolean isEmpty() {
-        return size == 0;
     }
 
     /** Construct an ArrayDeque from a list of arguments */
@@ -86,16 +84,19 @@ public class ArrayDeque<T> {
     }
 
     /** Print a string representation of the deque. */
+    @Override
     public void printDeque() {
         System.out.println(this.toString());
     }
 
     /** Return the size of the deque. */
+    @Override
     public int size() {
         return size;
     }
 
     /** Return a String representation of the deque. */
+    @Override
     public String toString() {
         String str = "";
         for (int i = 0; i < size; i++) {
@@ -111,6 +112,7 @@ public class ArrayDeque<T> {
      *
      * @return The value of the item removed from the deque.
      */
+    @Override
     public T removeFirst() {
         if (size == 0) {
             return null;
@@ -128,6 +130,7 @@ public class ArrayDeque<T> {
      *
      * @return The value of the item removed from the deque.
      */
+    @Override
     public T removeLast() {
         if (size == 0) {
             return null;

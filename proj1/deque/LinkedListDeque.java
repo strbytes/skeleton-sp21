@@ -2,7 +2,7 @@ package deque;
 
 /** Linked list implementation of a deque.
  * @author Str Bytes */
-public class LinkedListDeque<T> {
+public class LinkedListDeque<T> implements Deque<T> {
     /** Sentinel node provides access to the underlying data structure and
      * acts as the list terminator.
      */
@@ -40,6 +40,7 @@ public class LinkedListDeque<T> {
 
     /** Add a single item to the front of the deque.
      * @param item Value to add to the deque. */
+    @Override
     public void addFirst(T item) {
         Node temp = sentinel.next;
         sentinel.next = new Node(item, sentinel, sentinel.next);
@@ -49,6 +50,7 @@ public class LinkedListDeque<T> {
 
     /** Add a single item to the end of the deque.
      * @param item Value to add to the deque. */
+    @Override
     public void addLast(T item) {
         Node temp = sentinel.prev;
         sentinel.prev = new Node(item, sentinel.prev, sentinel);
@@ -58,6 +60,7 @@ public class LinkedListDeque<T> {
 
     /** Return the value stored at deque index i.
      * @param i Index of the value to be retrieved. */
+    @Override
     public T get(int i) {
         Node lst = sentinel.next;
         /* Don't evaluate deque items if the index is out of bounds. */
@@ -98,27 +101,23 @@ public class LinkedListDeque<T> {
         return getRecursive(i, sentinel.next, sentinel);
     }
 
-    /** Evaluates whether the deque is empty or now.
-     * @return Boolean of whether the deque is empty or not.
-     */
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
     /** Evaluate the number of elements in the deque.
      * @return Integer representation of the number of elements in the deque.
      */
+    @Override
     public int size() {
         return size;
     }
 
     /** Prints the contents of the deque to the console. */
+    @Override
     public void printDeque() {
         System.out.println(this);
     }
 
     /** Remove a single item to the front of the deque.
      * @return The value of the deque item being removed. */
+    @Override
     public T removeFirst() {
         if (size == 0) {
             return null;
@@ -132,6 +131,7 @@ public class LinkedListDeque<T> {
 
     /** Remove a single item to the end of the deque.
      * @return The value of the deque item being removed. */
+    @Override
     public T removeLast() {
         if (size == 0) {
             return null;
@@ -146,6 +146,7 @@ public class LinkedListDeque<T> {
     /** Constructs a string representation of the values in the deque.
      * @return A string representation of the values in the deque.
      */
+    @Override
     public String toString() {
         Node pos = sentinel.next;
         String str = "";
