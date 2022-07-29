@@ -101,6 +101,15 @@ public class LinkedListDeque<T> implements Deque<T> {
         return getRecursive(i, sentinel.next, sentinel);
     }
 
+    /** Construct an ArrayDeque from a list of arguments */
+    public static <T> LinkedListDeque<T> of(T... args) {
+        LinkedListDeque<T> deque = new LinkedListDeque<>();
+        for (T arg: args) {
+            deque.addLast(arg);
+        }
+        return deque;
+    }
+
     /** Evaluate the number of elements in the deque.
      * @return Integer representation of the number of elements in the deque.
      */
