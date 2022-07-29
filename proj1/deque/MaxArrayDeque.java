@@ -43,4 +43,13 @@ public class MaxArrayDeque<T> extends ArrayDeque<T> {
         }
         return largest;
     }
+
+    /** Construct an ArrayDeque from a list of arguments */
+    public static <T> MaxArrayDeque<T> of(Comparator<T> c, T... args) {
+        MaxArrayDeque<T> deque = new MaxArrayDeque<>(c);
+        for (T arg: args) {
+            deque.addLast(arg);
+        }
+        return deque;
+    }
 }
