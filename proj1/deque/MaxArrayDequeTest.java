@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 
 import java.util.Comparator;
 
-public class TestMaxArrayDeque {
+public class MaxArrayDequeTest {
 
     @Test
     public void TestMax() {
