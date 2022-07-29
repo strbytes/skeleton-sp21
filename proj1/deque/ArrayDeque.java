@@ -1,11 +1,13 @@
 package deque;
 
+import java.util.Iterator;
+
 /**
  * Array implementation of a deque.
  * @author Str Bytes
  * @param <T> Type of data to be stored in the deque.
  */
-public class ArrayDeque<T> implements Deque<T> {
+public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     /** The array used to implement the deque. */
     private T[] items;
     /** Integer representation of the size of the deque. */
@@ -158,5 +160,30 @@ public class ArrayDeque<T> implements Deque<T> {
         items[last] = null;
         size -= 1;
         return val;
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new ArrayDequeIterator();
+    }
+
+    private class ArrayDequeIterator implements Iterator<T> {
+        private int pos;
+
+        public ArrayDequeIterator() {
+            pos = 0;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return pos < size();
+        }
+
+        @Override
+        public T next() {
+            T val = get(pos);
+            pos += 1;
+            return val;
+        }
     }
 }

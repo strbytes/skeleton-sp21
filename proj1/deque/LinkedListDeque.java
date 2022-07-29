@@ -1,8 +1,10 @@
 package deque;
 
+import java.util.Iterator;
+
 /** Linked list implementation of a deque.
  * @author Str Bytes */
-public class LinkedListDeque<T> implements Deque<T> {
+public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     /** Sentinel node provides access to the underlying data structure and
      * acts as the list terminator.
      */
@@ -180,5 +182,30 @@ public class LinkedListDeque<T> implements Deque<T> {
             pos = pos.next;
         }
         return str + pos.val;
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new LinkedListDequeIterator();
+    }
+
+    private class LinkedListDequeIterator implements Iterator<T> {
+        private int pos;
+
+        public LinkedListDequeIterator() {
+            pos = 0;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return pos < size();
+        }
+
+        @Override
+        public T next() {
+            T val = get(pos);
+            pos += 1;
+            return val;
+        }
     }
 }

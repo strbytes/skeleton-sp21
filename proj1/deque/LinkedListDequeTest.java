@@ -158,4 +158,14 @@ public class LinkedListDequeTest {
             assertEquals(i, test.get(i), 0);
         }
     }
+
+    @Test
+    public void iteratorTest() {
+        LinkedListDeque<Integer> test = LinkedListDeque.of(0, 1, 2, 3, 4);
+        int i = 0;
+        for (Integer t: test) {
+            assert t == i;
+            i++;
+        }
+    }
 }
