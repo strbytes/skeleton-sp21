@@ -58,6 +58,22 @@ public class LinkedListDeque<T> implements Deque<T> {
         size += 1;
     }
 
+    /** Return whether two Deques have equal values */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        } else if (!(o instanceof Deque) || ((Deque<?>) o).size() != size()) {
+            return false;
+        }
+        for (int i = 0; i < size(); i++) {
+            if (((Deque<?>) o).get(i) != get(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /** Return the value stored at deque index i.
      * @param i Index of the value to be retrieved. */
     @Override

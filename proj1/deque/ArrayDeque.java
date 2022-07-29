@@ -63,6 +63,22 @@ public class ArrayDeque<T> implements Deque<T> {
         last = Math.floorMod((last + 1), items.length);
     }
 
+    /** Return whether two Deques have equal values */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        } else if (!(o instanceof Deque) || ((Deque<?>) o).size() != size()) {
+            return false;
+        }
+        for (int i = 0; i < size(); i++) {
+            if (((Deque<?>) o).get(i) != get(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /** Returns a value in the deque by index.
      *
      * @param i The index of the value to be retrieved.
