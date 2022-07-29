@@ -14,11 +14,11 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     /** Dually-linked list data structure. */
     private class Node {
         /** The value stored in the node. */
-        public T val;
+        private T val;
         /** A reference to the previous node in the deque. */
-        public Node prev;
+        private Node prev;
         /** A reference to the next node in the deque. */
-        public Node next;
+        private Node next;
 
         /** Construct a single dually-linked list node.
          * @param item The value stored in the node.
@@ -60,7 +60,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         size += 1;
     }
 
-    /** Return whether two Deques have equal values */
+    /** Return whether two Deques have equal values. */
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -81,7 +81,6 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     @Override
     public T get(int i) {
         Node lst = sentinel.next;
-        /* Don't evaluate deque items if the index is out of bounds. */
         while (lst != sentinel && i < size) {
             if (i == 0) {
                 return lst.val;
@@ -119,7 +118,11 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         return getRecursive(i, sentinel.next, sentinel);
     }
 
-    /** Construct an ArrayDeque from a list of arguments */
+    /** Construct an LinkedListDeque from a list of arguments.
+     * @param <T> The type of items to be contained in the Deque.
+     * @param args Sequence of items to be added to the Deque.
+     * @return An LinkedListDeque with the values args already added.
+     * */
     public static <T> LinkedListDeque<T> of(T... args) {
         LinkedListDeque<T> deque = new LinkedListDeque<>();
         for (T arg: args) {
@@ -189,10 +192,13 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         return new LinkedListDequeIterator();
     }
 
+    /** Iterator for LinkedListDeque. */
     private class LinkedListDequeIterator implements Iterator<T> {
+        /** Maintains the iterator's position in the Deque. */
         private int pos;
 
-        public LinkedListDequeIterator() {
+        /** Construct an LinkedListDequeIterator. */
+        LinkedListDequeIterator() {
             pos = 0;
         }
 

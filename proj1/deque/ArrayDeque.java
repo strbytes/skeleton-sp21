@@ -38,7 +38,6 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     }
 
     /** Adds an item to the beginning of the deque.
-     *
      * @param item The item to be added to the deque.
      */
     @Override
@@ -52,7 +51,6 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     }
 
     /** Adds an item to the end of the deque.
-     *
      * @param item The item to be added to the deque.
      */
     @Override
@@ -65,7 +63,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         last = Math.floorMod((last + 1), items.length);
     }
 
-    /** Return whether two Deques have equal values */
+    /** Return whether two Deques have equal values. */
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -82,7 +80,6 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     }
 
     /** Returns a value in the deque by index.
-     *
      * @param i The index of the value to be retrieved.
      * @return Returns the value held at index i of the deque.
      */
@@ -92,7 +89,11 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         return items[(first + 1 + i) % items.length];
     }
 
-    /** Construct an ArrayDeque from a list of arguments */
+    /** Construct an ArrayDeque from a list of arguments.
+     * @param <T> The type of items to be contained in the Deque.
+     * @param args Sequence of items to be added to the Deque.
+     * @return An ArrayDeque with the values args already added.
+     * */
     public static <T> ArrayDeque<T> of(T... args) {
         ArrayDeque<T> deque = new ArrayDeque<>();
         for (T arg: args) {
@@ -127,7 +128,6 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     }
 
     /** Remove the first item from the deque and return its value.
-     *
      * @return The value of the item removed from the deque.
      */
     @Override
@@ -145,7 +145,6 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     }
 
     /** Remove the last item from the deque and return its value.
-     *
      * @return The value of the item removed from the deque.
      */
     @Override
@@ -167,10 +166,13 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         return new ArrayDequeIterator();
     }
 
+    /** Iterator for ArrayDeque. */
     private class ArrayDequeIterator implements Iterator<T> {
+        /** Maintains the iterator's position in the Deque. */
         private int pos;
 
-        public ArrayDequeIterator() {
+        /** Construct an ArrayDequeIterator. */
+        ArrayDequeIterator() {
             pos = 0;
         }
 
