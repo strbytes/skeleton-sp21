@@ -17,9 +17,9 @@ public class TestArrayDequeEC {
                 int choice = StdRandom.uniform(6);
                 int randNum = StdRandom.uniform(testSize);
                 if (choice == 0) {
+                    sequence.addLast("size()");
                     assertEquals(lastThreeOperations(sequence),
                             control.size(), test.size());
-                    sequence.addLast("size()");
                 } else if (choice == 1) {
                     test.addFirst(randNum);
                     control.addFirst(randNum);
@@ -32,6 +32,9 @@ public class TestArrayDequeEC {
                     Integer testVal = test.removeFirst();
                     Integer controlVal = control.removeFirst();
                     sequence.addLast("removeFirst()");
+                    if (testVal == null && controlVal == null) {
+                        continue;
+                    }
                     assertNotNull(lastThreeOperations(sequence), testVal);
                     assertEquals(lastThreeOperations(sequence),
                             controlVal, testVal, 0.0);
@@ -39,6 +42,9 @@ public class TestArrayDequeEC {
                     Integer testVal = test.removeLast();
                     Integer controlVal = control.removeLast();
                     sequence.addLast("removeLast()");
+                    if (testVal == null && controlVal == null) {
+                        continue;
+                    }
                     assertNotNull(lastThreeOperations(sequence), testVal);
                     assertEquals(lastThreeOperations(sequence),
                             controlVal, testVal, 0.0);
@@ -47,6 +53,9 @@ public class TestArrayDequeEC {
                     Integer testVal = test.get(index);
                     Integer controlVal = control.get(index);
                     sequence.addLast("get(" + index + ")");
+                    if (testVal == null && controlVal == null) {
+                        continue;
+                    }
                     assertNotNull(lastThreeOperations(sequence), testVal);
                     assertEquals(lastThreeOperations(sequence),
                             controlVal, testVal, 0.0);
