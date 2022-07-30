@@ -21,8 +21,8 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     public ArrayDeque() {
         items = (T[]) new Object[8];
         size = 0;
-        first = 3;
-        last = 4;
+        first = 7;
+        last = 0;
     }
 
     /** Resize the array used to implement the deque.
@@ -30,15 +30,16 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
      */
     private void resize(int len) {
         T[] a = (T[]) new Object[len];
-        if (last > size) {
-            System.arraycopy(items, first + 1, a, 0, size);
-            first = len - 1;
-            last = size;
+        int actualFirst = Math.floorMod(first + 1, items.length);
+        int actualLast = Math.floorMod(last - 1, items.length);
+        if (actualFirst < actualLast) {
+            System.arraycopy(items, actualFirst, a, 0, size);
         } else {
-            System.arraycopy(items, 0, a, 0, last);
-            System.arraycopy(items, Math.floorMod(first + 1, size), a, len - (size - last), (size - last));
-            first = len - (size - last) - 1;
+            System.arraycopy(items, actualFirst, a, 0, items.length - actualFirst);
+            System.arraycopy(items, 0, a, items.length - actualFirst, size - (items.length - actualFirst));
         }
+        first = len - 1;
+        last = size;
         items = a;
     }
 
