@@ -26,14 +26,19 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     }
 
     /** Resize the array used to implement the deque.
-     *
      * @param len The desired length of the new array.
      */
     private void resize(int len) {
         T[] a = (T[]) new Object[len];
-        System.arraycopy(items, 0, a, 0, last);
-        System.arraycopy(items, first + 1, a, len - (size - last), (size - last));
-        first = len - (size - last) - 1;
+        if (last > size) {
+            System.arraycopy(items, first + 1, a, 0, size);
+            first = len - 1;
+            last = size;
+        } else {
+            System.arraycopy(items, 0, a, 0, last);
+            System.arraycopy(items, Math.floorMod(first + 1, size), a, len - (size - last), (size - last));
+            first = len - (size - last) - 1;
+        }
         items = a;
     }
 

@@ -162,4 +162,42 @@ public class ArrayDequeTest {
 			i++;
 		}
 	}
+
+	public void randomOperations() {
+		int[] testSizes = {5, 50, 500, 5000};
+		ArrayDeque<Double> test = new ArrayDeque<>();
+		int size = 0;
+		for (int testSize: testSizes) {
+			for (int i = 0; i < testSize; i++) {
+				double randNum = Math.random() * 4;
+				int choice = (int) Math.round(randNum);
+				if (choice == 0) {
+					assertEquals("Expected size does not match size()", size, test.size());
+				} else if (choice == 1) {
+					test.addFirst(randNum);
+					size += 1;
+				} else if (choice == 2) {
+					test.addLast(randNum);
+					size += 1;
+				} else if (choice == 3) {
+					test.removeFirst();
+					if (size != 0) {
+						size -= 1;
+					}
+				} else if (choice == 4) {
+					test.removeLast();
+					if (size != 0) {
+						size -= 1;
+					}
+				}
+			}
+		}
+	}
+
+	@Test
+	public void manyRandom() {
+		for (int i = 0; i < 1000; i++) {
+			randomOperations();
+		}
+	}
 }
