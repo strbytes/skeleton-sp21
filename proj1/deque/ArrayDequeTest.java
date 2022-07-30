@@ -144,6 +144,12 @@ public class ArrayDequeTest {
 		}
 	}
 
+	@Test(expected = AssertionError.class)
+	public void badGetTest() {
+		ArrayDeque<Integer> test = new ArrayDeque<>();
+		test.get(0);
+	}
+
 	@Test
 	public void ofTest() {
 		ArrayDeque<Integer> test = ArrayDeque.of(0, 1, 2, 3, 4);
@@ -166,29 +172,42 @@ public class ArrayDequeTest {
 	public void randomOperations() {
 		int[] testSizes = {5, 50, 500, 5000};
 		ArrayDeque<Double> test = new ArrayDeque<>();
-		int size = 0;
+		LinkedListDeque<Double> control = new LinkedListDeque<>();
 		for (int testSize: testSizes) {
 			for (int i = 0; i < testSize; i++) {
-				double randNum = Math.random() * 4;
+				double randNum = Math.random() * 5;
 				int choice = (int) Math.round(randNum);
 				if (choice == 0) {
-					assertEquals("Expected size does not match size()", size, test.size());
+					assertEquals("Expected size does not match size()",
+							control.size(), test.size());
 				} else if (choice == 1) {
 					test.addFirst(randNum);
-					size += 1;
+					control.addFirst(randNum);
 				} else if (choice == 2) {
 					test.addLast(randNum);
-					size += 1;
+					control.addLast(randNum);
 				} else if (choice == 3) {
-					test.removeFirst();
-					if (size != 0) {
-						size -= 1;
+					Double testVal = test.removeFirst();
+					Double controlVal = control.removeFirst();
+					if (testVal == null && controlVal == null) {
+						continue;
 					}
+					assertEquals("Test value did not equal control value",
+							controlVal, testVal, 0.0);
 				} else if (choice == 4) {
-					test.removeLast();
-					if (size != 0) {
-						size -= 1;
+					Double testVal = test.removeLast();
+					Double controlVal = control.removeLast();
+					if (testVal == null && controlVal == null) {
+						continue;
 					}
+					assertEquals("Test value did not equal control value",
+							controlVal, testVal, 0.0);
+				} else if (choice == 5 && control.size() > 0) {
+					int index = (int) (Math.round(Math.random() * (control.size() - 1)));
+					Double testVal = test.get(index);
+					Double controlVal = control.get(index);
+					assertEquals("Test value did not equal control value",
+							controlVal, testVal, 0.0);
 				}
 			}
 		}
@@ -198,6 +217,28 @@ public class ArrayDequeTest {
 	public void manyRandom() {
 		for (int i = 0; i < 1000; i++) {
 			randomOperations();
+		}
+	}
+
+	@Test
+	public void insertRemove() {
+		ArrayDeque<Integer> test = new ArrayDeque<Integer>();
+		LinkedListDeque<Integer> control = new LinkedListDeque<>();
+		for (int i = 0; i < 1000; i++) {
+			for (int j = 0; j < Math.random() * 100000; j++) {
+				if (i % 2 == 0) {
+					test.addFirst(j);
+					control.addFirst(j);
+				} else {
+					Integer testVal = test.removeFirst();
+					Integer controlVal = control.removeFirst();
+					if (testVal == null && controlVal == null) {
+						continue;
+					}
+					assertEquals("Test value did not equal control value",
+							controlVal, testVal, 0.0);
+				}
+			}
 		}
 	}
 }
