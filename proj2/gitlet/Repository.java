@@ -25,5 +25,23 @@ public class Repository {
     /** The .gitlet directory. */
     public static final File GITLET_DIR = join(CWD, ".gitlet");
 
+    public static void init() {
+        if (GITLET_DIR.exists()) {
+            Utils.message("A Gitlet version-control system already exists in the current directory.");
+            System.exit(0);
+        } else {
+            GITLET_DIR.mkdir();
+        }
+        // TODO setup initial commit (0 unix time)
+        // TODO set up staging area
+    }
+
     /* TODO: fill in the rest of this class. */
+    /* TODO: CHECKPOINT: add, commit, checkout -- [file name], checkout [commit id] -- [file name], log */
+
+    public static void add(File addFile) {
+        // TODO check if file in previous commit
+        // if new file, add new file box to staging area, else update the hash in the existing file box
+        // TODO hash file and add to staging area
+    }
 }
