@@ -8,7 +8,11 @@
 
 Validates arguments and calls commands from CapersRepository.
 
+
 ### Repository
+
+Stores static variables and methods for interacting with the repository.
+Main command logic.
 
 #### Fields
 
@@ -16,23 +20,34 @@ Validates arguments and calls commands from CapersRepository.
 2. Will need hooks for the commit tree, HEAD, staging area
 
 
-### Staging
+### Index
 
-Stores the information about a planned commit. Serializable.
-Holds much of the same info as Commit but does not serialize whole files.
+Stores the information about the current repo status. Serializable.
 
 #### Fields
 
-1. List of files (??) -- same as Commit format but doesn't serialize files, only points to
-working directory. 
-2. Pointer to previous commit(s)
+1. repo - Map<String, String> from a file name to its hash in the repo.
+2. staged - Map<String, String>  from a file name to its hash in the staging area.
+3. commit - Map<String, String>  from a file name to its hash in the working commit.
+
+
+### Tree
+
+Stores information about the files and their versions in a commit.
 
 
 ### Commit
 
-Stores the serializable information about a commit. Does not serialize files
-(links them via SHA-1 hash) either but does create serialized files when 
-necessary.
+Stores the serializable information about a commit in String format.
+Returns deserialized objects via getters.
+
+#### Fields
+
+1. parent - The hash of the parent commit.
+2. tree - The hash of the tree for this commit.
+3. timestamp - The Date the commit was made.
+4. message - The commit message.
+5. hash - The hash of this commit.
 
 ## Algorithms
 
