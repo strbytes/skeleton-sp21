@@ -14,28 +14,35 @@ import static gitlet.Utils.*;
  *  @author TODO
  */
 public class Repository {
-    /**
-     * TODO: add instance variables here.
-     *
-     * List all instance variables of the Repository class here with a useful
-     * comment above them describing what that variable represents and how that
-     * variable is used. We've provided two examples for you.
-     */
 
     /** The current working directory. */
     public static final File CWD = new File(System.getProperty("user.dir"));
     /** The .gitlet directory. */
     public static final File GITLET_DIR = join(CWD, ".gitlet");
+    /** Objects directory. */
+    public static final File OBJECTS_DIR = join(GITLET_DIR, "objects");
+    /** References directory. */
+    public static final File REFS_DIR = join(GITLET_DIR, "refs");
+    /** The index file to keep track of the working directory. */
+    public static final File INDEX = join(GITLET_DIR, "index");
+    /** HEAD pointer. Keeps track of current position in the commit tree. */
+    public static final File HEAD = join(CWD, "HEAD");
 
     public static void init() {
         if (GITLET_DIR.exists()) {
             Utils.message("A Gitlet version-control system already exists in the current directory.");
             System.exit(0);
-        } else {
-            GITLET_DIR.mkdir();
         }
-        // TODO setup initial commit (0 unix time)
+        GITLET_DIR.mkdir();
+        OBJECTS_DIR.mkdir();
+        REFS_DIR.mkdir();
+        Commit initialCommit = new Commit();
+        String initialCommitHash = initialCommit.getHash();
+        writeObject(initialCommitHash, initialCommit);
+
         // TODO set up staging area
+            // TODO method for reading/writing Index?
+    }
 
     public static void catFile(String type, String hash) {
         // TODO allow using a partial hash instead of full string
