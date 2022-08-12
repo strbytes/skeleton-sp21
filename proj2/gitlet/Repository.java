@@ -1,6 +1,8 @@
 package gitlet;
 
 import java.io.File;
+import java.io.Serializable;
+
 import static gitlet.Utils.*;
 
 // TODO: any imports you need here
@@ -34,6 +36,41 @@ public class Repository {
         }
         // TODO setup initial commit (0 unix time)
         // TODO set up staging area
+
+    public static void catFile(String type, String hash) {
+        // TODO allow using a partial hash instead of full string
+        String dirName = hash.substring(0, 2);
+        String fileName = hash.substring(2);
+        File file = join(OBJECTS_DIR, dirName);
+        file = join(file, fileName);
+        if (file.exists()) {
+            Object fileContents;
+            switch (type) {
+                case "commit":
+                    fileContents = Utils.readObject(file, Commit.class);
+                    break;
+                default:
+                    fileContents = "Invalid type specified.";
+            }
+            System.out.println(fileContents);
+        } else {
+            System.out.println("File not found.");
+        }
+
+    }
+
+    public static void writeObject(String hash, Serializable object) {
+        String dirName = hash.substring(0, 2);
+        String fileName = hash.substring(2);
+        File dir = join(OBJECTS_DIR, dirName);
+        dir.mkdir();
+        File file = join(dir, fileName);
+        try {
+            file.createNewFile();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        Utils.writeObject(file, object);
     }
 
     /* TODO: fill in the rest of this class. */
