@@ -26,6 +26,13 @@ public class Main {
                 validateRepo();
                 // TODO: handle the `add [filename]` command
                 break;
+            case "cat-file":
+                validateRepo();
+                validateNumArgs(args, 3, 3);
+                String type = args[1];
+                String hash = args[2];
+                Repository.catFile(type, hash);
+                break;
             default:
                 System.out.println("No command with that name exists.");
         }
