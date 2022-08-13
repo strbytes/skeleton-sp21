@@ -32,6 +32,7 @@ public class BSTMap<K extends Comparable, V> implements Map61B<K, V> {
     @Override
     public void clear() {
         root = null;
+        size = 0;
     }
 
     /* Returns true if this map contains a mapping for the specified key. */
