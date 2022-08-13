@@ -39,7 +39,8 @@ public class Repository {
         Commit initialCommit = new Commit();
         String initialCommitHash = initialCommit.getHash();
         writeObject(initialCommitHash, initialCommit);
-
+        Index index = new Index();
+        Utils.writeObject(INDEX, index);
         // TODO set up staging area
             // TODO method for reading/writing Index?
     }
@@ -83,9 +84,18 @@ public class Repository {
     /* TODO: fill in the rest of this class. */
     /* TODO: CHECKPOINT: add, commit, checkout -- [file name], checkout [commit id] -- [file name], log */
 
-    public static void add(File addFile) {
-        // TODO check if file in previous commit
-        // if new file, add new file box to staging area, else update the hash in the existing file box
-        // TODO hash file and add to staging area
+    public static void add(String fileName) {
+        File file = join(CWD, fileName);
+        if (!file.exists()) {
+            Utils.message("File does not exist.");
+            System.exit(0);
+        }
+        Index index = Utils.readObject(INDEX, Index.class);
+        if (!index.contains(file)) {
+            index.addFile(file);
+            Utils.writeObject(INDEX, index);
+        } else {
+            // TODO check if new version is identical to previous commit or to staged commit
+        }
     }
 }

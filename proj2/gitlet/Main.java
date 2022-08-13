@@ -14,8 +14,7 @@ public class Main {
             System.exit(0);
         }
         String firstArg = args[0];
-        // TODO argument validation
-        // TODO test if in a gitlet directory before running commands other than init
+
         switch(firstArg) {
             case "init":
                 validateNumArgs(args, 1, 1);
@@ -24,7 +23,8 @@ public class Main {
             case "add":
                 validateNumArgs(args, 2, 2);
                 validateRepo();
-                // TODO: handle the `add [filename]` command
+                String fileName = args[1];
+                Repository.add(fileName);
                 break;
             case "cat-file":
                 validateRepo();
