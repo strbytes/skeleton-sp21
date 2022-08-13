@@ -1,17 +1,31 @@
 package gitlet;
+import java.io.File;
 import java.util.*;
 
 public class Index implements Dumpable {
     private List<String> files;
-    private Map<String, String> repo;
-    private Map<String, String> staged;
-    private Map<String, String> commit;
+    private Map<String, String[]> versions;
 
     public Index() {
         files = new ArrayList<>();
-        repo = new HashMap<>();
-        staged = new HashMap<>();
-        commit = new HashMap<>();
+        versions = new HashMap<>();
+    }
+
+    public void addFile(File file) {
+        assert (!contains(file));
+        String fileName = file.getName();
+        String fileContents = Utils.readContentsAsString(file);
+        String hash = Utils.sha1(fileContents);
+        files.add(fileName);
+        versions.put(fileName, new String[] {"", "", hash});
+    }
+
+    public boolean contains(String fileName) {
+        return files.contains(fileName);
+    }
+
+    public boolean contains(File file) {
+        return files.contains(file.getName());
     }
 
     @Override
