@@ -1,6 +1,8 @@
 package bstmap;
 
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 public class BSTMap<K extends Comparable, V> implements Map61B<K, V> {
@@ -20,6 +22,11 @@ public class BSTMap<K extends Comparable, V> implements Map61B<K, V> {
             value = v;
             left = null;
             right = null;
+        }
+
+        @Override
+        public String toString() {
+            return "Node: " + key + " / " + value;
         }
     }
 
@@ -114,7 +121,11 @@ public class BSTMap<K extends Comparable, V> implements Map61B<K, V> {
      * If you don't implement this, throw an UnsupportedOperationException. */
     @Override
     public Set<K> keySet() {
-        throw new UnsupportedOperationException();
+        Set s = new HashSet();
+        for (K key: this) {
+            s.add(key);
+        }
+        return s;
     }
 
     /* Removes the mapping for the specified key from this map if present.
@@ -135,6 +146,74 @@ public class BSTMap<K extends Comparable, V> implements Map61B<K, V> {
 
     @Override
     public Iterator<K> iterator() {
-        throw new UnsupportedOperationException();
+        return new BSTMapIterator();
+    }
+
+    private class BSTMapIterator implements Iterator<K> {
+        K curr;
+        K nextKey;
+        K maxKey;
+
+        BSTMapIterator() {
+            curr = findMin(root);
+            maxKey = findMax(root);
+        }
+
+        @Override
+        public boolean hasNext() {
+            return curr != null;
+        }
+
+        @Override
+        public K next() {
+            if (curr == null) {
+                throw new NoSuchElementException();
+            } else if (curr == maxKey) {
+                curr = null;
+                return maxKey;
+            }
+            nextKey = curr;
+            curr = findNext(root, curr);
+            return nextKey;
+        }
+
+        private K findMin(Node n) {
+            if (n == null) {
+                return null;
+            }
+            K min = findMin(n.left);
+            if (min == null) {
+                return n.key;
+            }
+            return min;
+        }
+
+        private K findMax(Node n) {
+            if (n == null) {
+                return null;
+            }
+            K max = findMax(n.right);
+            if (max == null) {
+                return n.key;
+            }
+            return max;
+        }
+
+        private K findNext(Node n, K k) {
+            if (n == null) {
+                return null;
+            }
+            int comp = k.compareTo(n.key);
+            K next;
+            if (comp < 0) {
+                next = findNext(n.left, k);
+            } else {
+                next = findNext(n.right, k);
+            }
+            if (next == null || next.compareTo(k) <= 0) {
+                return n.key;
+            }
+            return next;
+        }
     }
 }
