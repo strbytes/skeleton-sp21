@@ -64,7 +64,12 @@ public class Repository {
         } else {
             System.out.println("File not found.");
         }
+    }
 
+    public static void lsFiles() {
+        // TODO this isn't very good
+        Index index = Utils.readObject(INDEX, Index.class);
+        index.dump();
     }
 
     public static void writeObject(String hash, Serializable object) {

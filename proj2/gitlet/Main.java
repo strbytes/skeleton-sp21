@@ -33,6 +33,11 @@ public class Main {
                 String hash = args[2];
                 Repository.catFile(type, hash);
                 break;
+            case "ls-files":
+                validateRepo();
+                validateNumArgs(args, 1, 1);
+                Repository.lsFiles();
+                break;
             default:
                 System.out.println("No command with that name exists.");
         }
