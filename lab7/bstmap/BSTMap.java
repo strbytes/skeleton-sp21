@@ -13,7 +13,7 @@ public class BSTMap<K extends Comparable, V> implements Map61B<K, V> {
 
     /** BST data structure. */
     private class Node {
-        private final K key;
+        private K key;
         private V value;
         private Node left, right;
 
@@ -133,7 +133,40 @@ public class BSTMap<K extends Comparable, V> implements Map61B<K, V> {
      * UnsupportedOperationException. */
     @Override
     public V remove(K key) {
-        throw new UnsupportedOperationException();
+        V val = get(key);
+        root = remove(root, key);
+        if (val != null) {
+            size -= 1;
+        }
+        return val;
+    }
+
+    public Node remove(Node n, K key) {
+        if (n == null) {
+            return null;
+        }
+
+        int comp = key.compareTo(n.key);
+        if (comp < 0) {
+            n.left = remove(n.left, key);
+        } else if (comp > 0) {
+            n.right = remove(n.right, key);
+        } else {
+            if (n.left == null) {
+                return n.right;
+            } else if (n.right == null) {
+                return n.left;
+            } else {
+                Node temp = n.left;
+                while (temp != null && temp.right != null) {
+                    temp = temp.right;
+                }
+                remove(n, temp.key);
+                n.key = temp.key;
+                n.value = temp.value;
+            }
+        }
+        return n;
     }
 
     /* Removes the entry for the specified key only if it is currently mapped to
