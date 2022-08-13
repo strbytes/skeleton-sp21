@@ -174,7 +174,11 @@ public class BSTMap<K extends Comparable, V> implements Map61B<K, V> {
      * throw an UnsupportedOperationException.*/
     @Override
     public V remove(K key, V value) {
-        throw new UnsupportedOperationException();
+        if (get(key).equals(value)) {
+            remove(key);
+            return value;
+        }
+        return null;
     }
 
     @Override
