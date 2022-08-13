@@ -37,7 +37,22 @@ public class BSTMap<K extends Comparable, V> implements Map61B<K, V> {
     /* Returns true if this map contains a mapping for the specified key. */
     @Override
     public boolean containsKey(K key) {
-        throw new UnsupportedOperationException();
+        return containsKey(root, key);
+    }
+
+    /** Returns true if this Node or any of it's children contain a mapping
+     * for the specified key. */
+    private boolean containsKey(Node n, K key) {
+        if (n == null) {
+            return false;
+        }
+        int comp = key.compareTo(n.key);
+        if (comp < 0) {
+            return containsKey(n.left, key);
+        } else if (comp > 0) {
+            return containsKey(n.right, key);
+        }
+        return true;
     }
 
     /* Returns the value to which the specified key is mapped, or null if this
