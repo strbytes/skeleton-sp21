@@ -5,11 +5,11 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-public class BSTMap<K extends Comparable, V> implements Map61B<K, V> {
+public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
     /* Pointer to the beginning of the BST. */
     private Node root;
-    public int size;
+    private int size;
 
     /** BST data structure. */
     private class Node {
@@ -128,6 +128,16 @@ public class BSTMap<K extends Comparable, V> implements Map61B<K, V> {
         return s;
     }
 
+    public void printInOrder() {
+        StringBuilder s = new StringBuilder();
+        for (K key: this) {
+            s.append(get(key));
+            s.append(" ");
+        }
+        s.deleteCharAt(s.length() - 1);
+        System.out.println(s);
+    }
+
     /* Removes the mapping for the specified key from this map if present.
      * Not required for Lab 7. If you don't implement this, throw an
      * UnsupportedOperationException. */
@@ -141,7 +151,7 @@ public class BSTMap<K extends Comparable, V> implements Map61B<K, V> {
         return val;
     }
 
-    public Node remove(Node n, K key) {
+    private Node remove(Node n, K key) {
         if (n == null) {
             return null;
         }
