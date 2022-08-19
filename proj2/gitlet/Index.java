@@ -22,6 +22,22 @@ public class Index implements Dumpable {
         return files.containsKey(fileName);
     }
 
+    public Map<String, String> getStaged() {
+        Map<String, String> staged = new HashMap<>();
+        for (String file: files.keySet()) {
+            staged.put(file, files.get(file)[1]);
+        }
+        return staged;
+    }
+
+    void commitStaged() {
+        for (String file: files.keySet()) {
+            if (files.get(file)[1] != "") {
+                files.get(file)[2] = files.get(file)[1];
+            }
+        }
+    }
+
     public boolean modified(String fileName) {
         assert contains(fileName);
         String[] versions = files.get(fileName);
