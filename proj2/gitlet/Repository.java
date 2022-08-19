@@ -23,10 +23,13 @@ public class Repository {
     public static final File OBJECTS_DIR = join(GITLET_DIR, "objects");
     /** References directory. */
     public static final File REFS_DIR = join(GITLET_DIR, "refs");
+    /** Branches directory. */
+    public static final File BRANCHES = join(REFS_DIR, "branches");
+
     /** The index file to keep track of the working directory. */
     public static final File INDEX = join(GITLET_DIR, "index");
     /** HEAD pointer. Keeps track of current position in the commit tree. */
-    public static final File HEAD = join(CWD, "HEAD");
+    public static final File HEAD = join(GITLET_DIR, "head");
 
     public static void init() {
         if (GITLET_DIR.exists()) {
@@ -35,14 +38,15 @@ public class Repository {
         }
         GITLET_DIR.mkdir();
         OBJECTS_DIR.mkdir();
-        REFS_DIR.mkdir();
+        BRANCHES.mkdirs();
         Commit initialCommit = new Commit();
         String initialCommitHash = initialCommit.getHash();
         writeObject(initialCommitHash, initialCommit);
+        Utils.createFile(HEAD);
+        Utils.writeContents(HEAD, initialCommitHash);
+        newBranch("master", initialCommitHash);
         Index index = new Index();
         Utils.writeObject(INDEX, index);
-        // TODO set up staging area
-            // TODO method for reading/writing Index?
     }
 
     public static void catFile(String type, String hash) {
@@ -78,12 +82,14 @@ public class Repository {
         File dir = join(OBJECTS_DIR, dirName);
         dir.mkdir();
         File file = join(dir, fileName);
-        try {
-            file.createNewFile();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+        Utils.createFile(file);
         Utils.writeObject(file, object);
+    }
+
+    public static void newBranch(String name, String commit) {
+        File branch = join(BRANCHES, name);
+        Utils.createFile(branch);
+        Utils.writeContents(branch, commit);
     }
 
     /* TODO: fill in the rest of this class. */
