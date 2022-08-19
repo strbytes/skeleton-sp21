@@ -92,15 +92,22 @@ public class Repository {
     public static void add(String fileName) {
         File file = join(CWD, fileName);
         if (!file.exists()) {
-            Utils.message("File does not exist.");
+            Utils.message(String.format("File %s does not exist.", fileName));
             System.exit(0);
         }
+
+        String fileContents = Utils.readContentsAsString(file);
+        String hash = Utils.sha1(fileContents);
         Index index = Utils.readObject(INDEX, Index.class);
-        if (!index.contains(file)) {
-            index.addFile(file);
-            Utils.writeObject(INDEX, index);
+
+        if (index.contains(fileName)) {
+            index.updateFile(fileName, hash);
+            if (index.modified(fileName)) {
+                index.stageModified(fileName);
+            }
         } else {
-            // TODO check if new version is identical to previous commit or to staged commit
+            index.addFile(fileName, hash);
+            Utils.writeObject(INDEX, index);
         }
     }
 }
