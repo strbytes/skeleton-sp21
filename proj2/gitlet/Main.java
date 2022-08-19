@@ -30,7 +30,7 @@ public class Main {
                 validateRepo();
                 validateNumArgs(args, 3, 3);
                 String type = args[1];
-                String hash = args[2];
+                String hash = Repository.getFullHash(args[2]);
                 Repository.catFile(type, hash);
                 break;
             case "ls-files":

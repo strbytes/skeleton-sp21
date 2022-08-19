@@ -61,6 +61,12 @@ public class Repository {
                 case "commit":
                     fileContents = Utils.readObject(file, Commit.class);
                     break;
+                case "tree":
+                    fileContents = Utils.readObject(file, Tree.class);
+                    break;
+                case "file":
+                    fileContents = Utils.readContentsAsString(file);
+                    break;
                 default:
                     fileContents = "Invalid type specified.";
             }
@@ -68,6 +74,39 @@ public class Repository {
         } else {
             System.out.println("File not found.");
         }
+    }
+
+    static String getFullHash(String partial) {
+        String hashDirName = null;
+        String hashFile = null;
+        for (String dir: OBJECTS_DIR.list()) {
+            if (dir.equals(partial.substring(0, 2))) {
+                hashDirName = dir;
+                break;
+            }
+        }
+
+        if (hashDirName != null) {
+            File hashDir = join(OBJECTS_DIR, hashDirName);
+            String[] objects = hashDir.list((dir, name) ->
+                    name.substring(0, partial.length() - 2).equals(partial.substring(2)));
+
+            switch (objects.length) {
+                case 0:
+                    Utils.message("Object not found.");
+                    System.exit(0);
+                    break;
+                case 1:
+                    hashFile = objects[0];
+                    break;
+                default:
+                    Utils.message("Ambiguous argument.");
+            }
+        } else {
+            Utils.message("Object not found.");
+            System.exit(0);
+        }
+        return hashDirName + hashFile;
     }
 
     public static void lsFiles() {
