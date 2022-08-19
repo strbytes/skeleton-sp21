@@ -38,6 +38,11 @@ public class Main {
                 validateNumArgs(args, 1, 1);
                 Repository.lsFiles();
                 break;
+            case "commit":
+                validateRepo();
+                validateNumArgs(args, 2, 2);
+                Repository.commit(args[1]);
+                break;
             default:
                 System.out.println("No command with that name exists.");
         }

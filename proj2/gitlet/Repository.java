@@ -116,4 +116,16 @@ public class Repository {
             Utils.writeObject(INDEX, index);
         }
     }
+
+    public static void commit(String message) {
+        String head = Utils.readContentsAsString(HEAD);
+        Index index = Utils.readObject(INDEX, Index.class);
+        Tree tree = new Tree(index.getStaged());
+        writeObject(tree.getHash(), tree);
+        Commit commit = new Commit(head, tree.getHash(), message);
+        writeObject(commit.getHash(), commit);
+        Utils.writeContents(HEAD, commit.getHash());
+        index.commitStaged();
+        Utils.writeObject(INDEX, index);
+    }
 }
