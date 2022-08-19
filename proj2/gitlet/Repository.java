@@ -137,7 +137,7 @@ public class Repository {
     public static void add(String fileName) {
         File file = join(CWD, fileName);
         if (!file.exists()) {
-            Utils.message(String.format("File %s does not exist.", fileName));
+            Utils.message("File does not exist.");
             System.exit(0);
         }
 
