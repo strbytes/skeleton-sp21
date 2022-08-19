@@ -1,7 +1,6 @@
 package gitlet;
 
-import java.io.Serializable;
-import java.util.Date; // TODO: You'll likely use this in this class
+import java.util.Date;
 
 /** Represents a gitlet commit object.
  *  TODO: It's a good idea to give a description here of what else this Class
@@ -23,9 +22,9 @@ public class Commit implements Dumpable {
     private String hash;
 
     /** Create a new Commit out of a parent Commit, a commit Tree, and a commit message. */
-    public Commit(Commit parent, Tree tree, String message) {
-        this.parent = parent.getHash();
-        this.tree = tree.toString();
+    public Commit(String parent, String tree, String message) {
+        this.parent = parent;
+        this.tree = tree;
         this.message = message;
         timestamp = new Date().toString();
         hash = Utils.sha1(parent, tree, message, timestamp);
@@ -41,12 +40,10 @@ public class Commit implements Dumpable {
     }
 
     public String getParent() {
-        // TODO find and deserialize file and return Commit?
         return parent;
     }
 
     public String getTree() {
-        // TODO find and deserialize file and return Tree?
         return tree;
     }
 
@@ -64,8 +61,7 @@ public class Commit implements Dumpable {
 
     @Override
     public String toString() {
-        return "Hash: " + hash + "\n" +
-        "Parent: " + parent + "\n" +
+        return "Parent: " + parent + "\n" +
         "Tree: " + tree + "\n" +
         "Timestamp: " + timestamp + "\n" +
         "Message: " + message + "\n";
