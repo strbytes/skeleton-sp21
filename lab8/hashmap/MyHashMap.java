@@ -146,6 +146,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         if (buckets[b] == null) {
             buckets[b] = createBucket();
             buckets[b].add(createNode(key, value));
+            size += 1;
         } else {
             boolean found = false;
             for (Node n : buckets[b]) {
@@ -156,9 +157,9 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
             }
             if (!found) {
                 buckets[b].add(createNode(key, value));
+                size += 1;
             }
         }
-        size += 1;
         if ((float) size / buckets.length > loadFactor) {
             resize(buckets.length * 2);
         }
@@ -216,28 +217,24 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
 
         public MyHashMapIterator() {
             b = 0;
-            if (buckets[b] != null) {
-                iter = buckets[b].iterator();
-            }
         }
 
         @Override
         public boolean hasNext() {
-            while (b < size) {
+            while (b < buckets.length) {
                 if (iter != null && iter.hasNext()) {
                     return true;
-                }
-                b += 1;
-                if (buckets[b] != null) {
+                } else if (buckets[b] != null) {
                     iter = buckets[b].iterator();
                 }
+                b += 1;
             }
             return false;
         }
 
         @Override
         public K next() {
-            while (b < size) {
+            while (b < buckets.length) {
                 if (iter != null && iter.hasNext()) {
                     return iter.next().key;
                 }
