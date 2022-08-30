@@ -180,7 +180,18 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * UnsupportedOperationException.
      */
     public V remove(K key) {
-        throw new UnsupportedOperationException();
+        int b = Math.floorMod(key.hashCode(), buckets.length);
+        V returnVal = null;
+        if (buckets[b] != null) {
+            for (Node n : buckets[b]) {
+                if (key.equals(n.key)) {
+                    returnVal = n.value;
+                    buckets[b].remove(n);
+                    size -= 1;
+                }
+            }
+        }
+        return returnVal;
 	}
 
     /**
@@ -189,7 +200,18 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * throw an UnsupportedOperationException.
      */
     public V remove(K key, V value) {
-        throw new UnsupportedOperationException();
+        int b = Math.floorMod(key.hashCode(), buckets.length);
+        V returnVal = null;
+        if (buckets[b] != null) {
+            for (Node n : buckets[b]) {
+                if (key.equals(n.key) && value.equals(n.value)) {
+                    returnVal = n.value;
+                    buckets[b].remove(n);
+                    size -= 1;
+                }
+            }
+        }
+        return returnVal;
 	}
 
     private void resize(int s) {
