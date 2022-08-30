@@ -1,6 +1,6 @@
 package hashmap;
 
-import java.util.Collection;
+import java.util.*;
 
 /**
  *  A hash table-backed Map implementation. Provides amortized constant time
@@ -27,12 +27,19 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
 
     /* Instance Variables */
     private Collection<Node>[] buckets;
-    // You should probably define some more!
+    private final double loadFactor;
+    private int size;
 
     /** Constructors */
-    public MyHashMap() { }
+    public MyHashMap() {
+        buckets = createTable(16);
+        loadFactor = 0.75;
+    }
 
-    public MyHashMap(int initialSize) { }
+    public MyHashMap(int initialSize) {
+        buckets = createTable(initialSize);
+        loadFactor = 0.75;
+    }
 
     /**
      * MyHashMap constructor that creates a backing array of initialSize.
@@ -41,13 +48,16 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * @param initialSize initial size of backing array
      * @param maxLoad maximum load factor
      */
-    public MyHashMap(int initialSize, double maxLoad) { }
+    public MyHashMap(int initialSize, double maxLoad) {
+        buckets = createTable(initialSize);
+        loadFactor = maxLoad;
+    }
 
     /**
      * Returns a new node to be placed in a hash table bucket
      */
     private Node createNode(K key, V value) {
-        return null;
+        return new Node(key, value);
     }
 
     /**
@@ -69,7 +79,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * OWN BUCKET DATA STRUCTURES WITH THE NEW OPERATOR!
      */
     protected Collection<Node> createBucket() {
-        return null;
+        return new LinkedList<>();
     }
 
     /**
@@ -82,10 +92,161 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * @param tableSize the size of the table to create
      */
     private Collection<Node>[] createTable(int tableSize) {
-        return null;
+        size = 0;
+        return new Collection[tableSize];
     }
 
-    // TODO: Implement the methods of the Map61B Interface below
-    // Your code won't compile until you do so!
+    /** Removes all of the mappings from this map. */
+    public void clear() {
+        buckets = createTable(buckets.length);
+        size = 0;
+	}
 
+    /** Returns true if this map contains a mapping for the specified key. */
+    public boolean containsKey(K key) {
+        int b = Math.floorMod(key.hashCode(), buckets.length);
+        if (buckets[b] != null) {
+            for (Node n : buckets[b]) {
+                if (key.equals(n.key)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+	}
+
+    /**
+     * Returns the value to which the specified key is mapped, or null if this
+     * map contains no mapping for the key.
+     */
+    public V get(K key) {
+        int b = Math.floorMod(key.hashCode(), buckets.length);
+        if (buckets[b] != null) {
+            for (Node n : buckets[b]) {
+                if (key.equals(n.key)) {
+                    return n.value;
+                }
+            }
+        }
+        return null;
+	}
+
+    /** Returns the number of key-value mappings in this map. */
+    public int size() {
+        return size;
+	}
+
+    /**
+     * Associates the specified value with the specified key in this map.
+     * If the map previously contained a mapping for the key,
+     * the old value is replaced.
+     */
+    public void put(K key, V value) {
+        int b = Math.floorMod(key.hashCode(), buckets.length);
+        if (buckets[b] == null) {
+            buckets[b] = createBucket();
+            buckets[b].add(createNode(key, value));
+        } else {
+            boolean found = false;
+            for (Node n : buckets[b]) {
+                if (n.key.equals(key)) {
+                    n.value = value;
+                    found = true;
+                }
+            }
+            if (!found) {
+                buckets[b].add(createNode(key, value));
+            }
+        }
+        size += 1;
+        if ((float) size / buckets.length > loadFactor) {
+            resize(buckets.length * 2);
+        }
+	}
+
+    /** Returns a Set view of the keys contained in this map. */
+    public Set<K> keySet() {
+        Set<K> keys = new HashSet<>();
+        for (K k : this) {
+            keys.add(k);
+        }
+        return keys;
+	}
+
+    /**
+     * Removes the mapping for the specified key from this map if present.
+     * Not required for Lab 8. If you don't implement this, throw an
+     * UnsupportedOperationException.
+     */
+    public V remove(K key) {
+        throw new UnsupportedOperationException();
+	}
+
+    /**
+     * Removes the entry for the specified key only if it is currently mapped to
+     * the specified value. Not required for Lab 8. If you don't implement this,
+     * throw an UnsupportedOperationException.
+     */
+    public V remove(K key, V value) {
+        throw new UnsupportedOperationException();
+	}
+
+    private void resize(int s) {
+        Set<Node> vals = new HashSet<>();
+        for (Collection<Node> b : buckets) {
+            if (b != null) {
+                vals.addAll(b);
+            }
+        }
+        buckets = createTable(s);
+        for (Node n : vals) {
+            put(n.key, n.value);
+        }
+    }
+
+    public MyHashMapIterator iterator() {
+        return new MyHashMapIterator();
+    }
+
+    private class MyHashMapIterator implements Iterator<K> {
+        /** Current bucket being iterated over. */
+        int b;
+        /** Iterator of bucket being iterated over. */
+        Iterator<Node> iter;
+
+        public MyHashMapIterator() {
+            b = 0;
+            if (buckets[b] != null) {
+                iter = buckets[b].iterator();
+            }
+        }
+
+        @Override
+        public boolean hasNext() {
+            while (b < size) {
+                if (iter != null && iter.hasNext()) {
+                    return true;
+                }
+                b += 1;
+                if (buckets[b] != null) {
+                    iter = buckets[b].iterator();
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public K next() {
+            while (b < size) {
+                if (iter != null && iter.hasNext()) {
+                    return iter.next().key;
+                }
+                b += 1;
+                if (buckets[b] != null) {
+                    iter = buckets[b].iterator();
+                }
+            }
+            throw new NoSuchElementException();
+        }
+    }
 }
