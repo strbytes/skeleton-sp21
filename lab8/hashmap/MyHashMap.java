@@ -227,7 +227,8 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         }
     }
 
-    public MyHashMapIterator iterator() {
+    @Override
+    public Iterator<K> iterator() {
         return new MyHashMapIterator();
     }
 
