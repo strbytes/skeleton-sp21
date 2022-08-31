@@ -19,8 +19,17 @@ public class Tree implements Dumpable {
 
     @Override
     public void dump() {
+        System.out.println(this);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
         for (String file: files.keySet()) {
-            System.out.println(file + ":\t" + files.get(file));
+            s.append(file);
+            s.append(":\t");
+            s.append(files.get(file));
         }
+        return s.toString();
     }
 }

@@ -46,7 +46,7 @@ public class Index implements Dumpable {
         assert contains(fileName);
         String[] versions = files.get(fileName);
         // TODO does this work? Do I need to distinguish which is modified here?
-        return versions[0].equals(versions[1]) || versions[0].equals(versions[2]);
+        return !versions[0].equals(versions[1]) || !versions[0].equals(versions[2]);
     }
 
     public void stageModified(String fileName) {
@@ -57,14 +57,23 @@ public class Index implements Dumpable {
 
     @Override
     public void dump() {
+        System.out.println(this);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
         for (String f: files.keySet()) {
-            System.out.println(f);
+            s.append(f);
+            s.append("\n");
             for (int i = 0; i < 3; i++) {
-                String header = versionHeaders[i];
-                String value = files.get(f)[i];
-                System.out.println("\t" + header + "\t" + value);
+                s.append("\t");
+                s.append(versionHeaders[i]);
+                s.append("\t");
+                s.append(files.get(f)[i]);
+                s.append("\n");
             }
         }
-        System.out.println();
+        return s.toString();
     }
 }

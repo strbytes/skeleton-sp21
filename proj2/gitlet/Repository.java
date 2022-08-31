@@ -50,7 +50,6 @@ public class Repository {
     }
 
     public static void catFile(String type, String hash) {
-        // TODO allow using a partial hash instead of full string
         String dirName = hash.substring(0, 2);
         String fileName = hash.substring(2);
         File file = join(OBJECTS_DIR, dirName);
@@ -110,9 +109,8 @@ public class Repository {
     }
 
     public static void lsFiles() {
-        // TODO this isn't very good
         Index index = Utils.readObject(INDEX, Index.class);
-        index.dump();
+        System.out.println(index);
     }
 
     public static void writeObject(String hash, Serializable object) {
