@@ -123,6 +123,16 @@ public class Repository {
         Utils.writeObject(file, object);
     }
 
+    public static void writeFile(String hash, String fileContents) {
+        String dirName = hash.substring(0, 2);
+        String fileName = hash.substring(2);
+        File dir = join(OBJECTS_DIR, dirName);
+        dir.mkdir();
+        File file = join(dir, fileName);
+        Utils.createFile(file);
+        Utils.writeContents(file, fileContents);
+    }
+
     public static void newBranch(String name, String commit) {
         File branch = join(BRANCHES, name);
         Utils.createFile(branch);
@@ -143,9 +153,12 @@ public class Repository {
         if (index.contains(fileName)) {
             if (index.modified(fileName)) {
                 index.stageModified(fileName);
+                writeFile(hash, fileContents);
+                Utils.writeObject(INDEX, index);
             }
         } else {
             index.addFile(fileName, hash);
+            writeFile(hash, fileContents);
             Utils.writeObject(INDEX, index);
         }
     }
