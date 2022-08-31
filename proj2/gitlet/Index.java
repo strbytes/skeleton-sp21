@@ -18,6 +18,10 @@ public class Index implements Dumpable {
         files.get(fileName)[0] = hash;
     }
 
+    public Set<String> getFiles() {
+        return files.keySet();
+    }
+
     public boolean contains(String fileName) {
         return files.containsKey(fileName);
     }

@@ -27,20 +27,19 @@ public class Main {
                 Repository.add(fileName);
                 break;
             case "cat-file":
-                validateRepo();
                 validateNumArgs(args, 3, 3);
+                validateRepo();
                 String type = args[1];
-                String hash = Repository.getFullHash(args[2]);
-                Repository.catFile(type, hash);
+                Repository.catFile(type, Repository.getFullHash(args[2]));
                 break;
             case "ls-files":
-                validateRepo();
                 validateNumArgs(args, 1, 1);
+                validateRepo();
                 Repository.lsFiles();
                 break;
             case "commit":
-                validateRepo();
                 validateNumArgs(args, 2, 2);
+                validateRepo();
                 Repository.commit(args[1]);
                 break;
             default:
@@ -55,9 +54,13 @@ public class Main {
         }
     }
 
+    /** Ensure program is being run in a valid Gitlet directory. Update any
+     * changes to the working directory in the index. */
     public static void validateRepo() {
         if (!Repository.GITLET_DIR.exists()) {
             Utils.message("Not in an initialized Gitlet directory.");
+            System.exit(0);
         }
+        Repository.updateIndex();
     }
 }

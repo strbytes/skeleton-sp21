@@ -131,9 +131,6 @@ public class Repository {
         Utils.writeContents(branch, commit);
     }
 
-    /* TODO: fill in the rest of this class. */
-    /* TODO: CHECKPOINT: add, commit, checkout -- [file name], checkout [commit id] -- [file name], log */
-
     public static void add(String fileName) {
         File file = join(CWD, fileName);
         if (!file.exists()) {
@@ -146,7 +143,6 @@ public class Repository {
         Index index = Utils.readObject(INDEX, Index.class);
 
         if (index.contains(fileName)) {
-            index.updateFile(fileName, hash);
             if (index.modified(fileName)) {
                 index.stageModified(fileName);
             }
@@ -167,4 +163,22 @@ public class Repository {
         index.commitStaged();
         Utils.writeObject(INDEX, index);
     }
+
+    /** Update the working directory versions of all files. */
+    public static void updateIndex() {
+        Index index = Utils.readObject(INDEX, Index.class);
+        for (String fileName : index.getFiles()) {
+            File file = join(CWD, fileName);
+            if (!file.exists()) {
+                index.updateFile(fileName, "");
+            } else {
+                String fileContents = Utils.readContentsAsString(file);
+                String hash = Utils.sha1(fileContents);
+                index.updateFile(fileName, hash);
+            }
+        }
+        Utils.writeObject(INDEX, index);
+    }
+
+    /** TODO checkout -- [file name], checkout [commit id] -- [file name], log */
 }
