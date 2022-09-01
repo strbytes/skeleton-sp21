@@ -144,6 +144,21 @@ public class Repository {
         return readContentsAsString(branch);
     }
 
+    /** Prints out information about the sequence of commits making up a branch. */
+    public static void printLog() {
+        String branch = Utils.readContentsAsString(HEAD);
+        String prevCommit = getBranch(branch);
+        while (!prevCommit.equals("")) {
+            Commit commit = readObject(prevCommit, Commit.class);
+            System.out.println("===");
+            System.out.println("commit " + commit.getHash());
+            System.out.println("Date: " + commit.getTimestamp());
+            System.out.println(commit.getMessage());
+            System.out.println();
+            prevCommit = commit.getParent();
+        }
+    }
+
     public static void checkoutCommit(String hash) {
         // TODO this should be checkout branch
 

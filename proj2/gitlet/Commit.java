@@ -35,7 +35,7 @@ public class Commit implements Dumpable {
         parent = "";
         tree = "";
         message = "initial commit";
-        timestamp = new Date(0).toString();
+        timestamp = String.format("%1$ta %1$tb %1$td %1$tH:%1$tM:%1$tS %1$tY %1$tz", new Date(0));
         hash = Utils.sha1(parent, tree, message, timestamp);
     }
 
@@ -51,8 +51,8 @@ public class Commit implements Dumpable {
         return message;
     }
 
-    public Date getTimestamp() {
-        return new Date(timestamp);
+    public String getTimestamp() {
+        return timestamp;
     }
 
     public String getHash() {

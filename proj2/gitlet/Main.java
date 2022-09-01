@@ -60,6 +60,11 @@ public class Main {
                         break;
                 }
                 break;
+            case "log":
+                validateNumArgs(args, 1, 1);
+                validateAndUpdateRepo();
+                Repository.printLog();
+                break;
             default:
                 System.out.println("No command with that name exists.");
         }
