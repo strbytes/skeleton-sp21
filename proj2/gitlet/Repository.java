@@ -38,7 +38,7 @@ public class Repository {
         OBJECTS_DIR.mkdir();
         REFS_DIR.mkdir();
         Commit initialCommit = new Commit();
-        String initialCommitHash = initialCommit.getHash();
+        String initialCommitHash = initialCommit.hash;
         writeObject(initialCommitHash, initialCommit);
         String branch = "master";
         newBranch(branch, initialCommitHash);
@@ -134,9 +134,9 @@ public class Repository {
         Tree tree = new Tree(index.getStaged());
         writeObject(tree.getHash(), tree);
         Commit commit = new Commit(prevCommit, tree.getHash(), message);
-        writeObject(commit.getHash(), commit);
+        writeObject(commit.hash, commit);
         File branchFile = join(REFS_DIR, branch);
-        Utils.writeContents(branchFile, commit.getHash());
+        Utils.writeContents(branchFile, commit.hash);
         index.commitStaged();
         Utils.writeObject(INDEX, index);
     }
@@ -170,11 +170,11 @@ public class Repository {
         while (!prevCommit.equals("")) {
             Commit commit = readObject(prevCommit, Commit.class);
             System.out.println("===");
-            System.out.println("commit " + commit.getHash());
-            System.out.println("Date: " + commit.getTimestamp());
-            System.out.println(commit.getMessage());
+            System.out.println("commit " + commit.hash);
+            System.out.println("Date: " + commit.timestamp);
+            System.out.println(commit.message);
             System.out.println();
-            prevCommit = commit.getParent();
+            prevCommit = commit.parent;
         }
     }
 
@@ -189,7 +189,7 @@ public class Repository {
         writeContents(HEAD, branchName);
         String commitHash = getBranch(branchName);
         Commit commit = readObject(commitHash, Commit.class);
-        String treeHash = commit.getTree();
+        String treeHash = commit.tree;
         Tree tree = readObject(treeHash, Tree.class);
         for (String fileName : tree) {
             checkoutFile(fileName);
@@ -220,7 +220,7 @@ public class Repository {
     public static void checkoutFileFromCommit(String hash, String fileName) {
         hash = getFullHash(hash);
         Commit commit = readObject(hash, Commit.class);
-        String treeHash = commit.getTree();
+        String treeHash = commit.tree;
         Tree tree = readObject(treeHash, Tree.class);
         String fileHash = tree.fileHash(fileName);
         String fileContents = readFile(fileHash);

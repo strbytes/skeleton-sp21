@@ -3,23 +3,23 @@ package gitlet;
 import java.util.Date;
 
 /** Represents a gitlet commit object.
- *  TODO: It's a good idea to give a description here of what else this Class
- *  does at a high level.
+ *  Stores a tree pointing to versions of the files that make up the commit
+ *  and useful metadata about it.
  *
- *  @author TODO
+ *  @author strbytes
  */
 public class Commit implements Dumpable {
 
     /** The parent Commit of this Commit. */
-    private String parent;
+    final String parent;
     /** The file tree of this Commit. */
-    private String tree;
+    final String tree;
     /** The timestamp of this Commit. */
-    private String timestamp;
+    final String timestamp;
     /** The message of this Commit. */
-    private String message;
+    final String message;
     /** The SHA-1 hash of this commit. */
-    private String hash;
+    final String hash;
 
     /** Create a new Commit out of a parent Commit, a commit Tree, and a commit message. */
     public Commit(String parent, String tree, String message) {
@@ -39,26 +39,7 @@ public class Commit implements Dumpable {
         hash = Utils.sha1(parent, tree, message, timestamp);
     }
 
-    public String getParent() {
-        return parent;
-    }
-
-    public String getTree() {
-        return tree;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public String getTimestamp() {
-        return timestamp;
-    }
-
-    public String getHash() {
-        return hash;
-    }
-
+    /** Return a string representation of the information stored in the commit. */
     @Override
     public String toString() {
         return "Parent: " + parent + "\n" +
@@ -67,6 +48,7 @@ public class Commit implements Dumpable {
         "Message: " + message + "\n";
     }
 
+    /** Print a string representation of the information stored in the commit. */
     @Override
     public void dump() {
         System.out.println(this);
