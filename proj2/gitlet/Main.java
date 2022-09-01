@@ -42,6 +42,24 @@ public class Main {
                 validateRepo();
                 Repository.commit(args[1]);
                 break;
+            case "checkout":
+                validateNumArgs(args, 2, 4);
+                validateRepo();
+                switch(args.length) {
+                    case 2:
+                        // TODO this is supposed to be checkout branch
+                        Repository.checkoutCommit(Repository.getFullHash(args[1]));
+                        break;
+                    case 3:
+                        Repository.checkoutFile(args[2]);
+                        break;
+                    case 4:
+                        Repository.checkoutFileFromCommit(args[1], args[3]);
+                        break;
+                    default:
+                        break;
+                }
+                break;
             default:
                 System.out.println("No command with that name exists.");
         }

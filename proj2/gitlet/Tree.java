@@ -1,9 +1,10 @@
 package gitlet;
 
+import java.util.Iterator;
 import java.util.Map;
 
 /** Stores the file tree of a Commit. */
-public class Tree implements Dumpable {
+public class Tree implements Dumpable, Iterable<String> {
 
     private Map<String, String> files;
     private String hash;
@@ -15,6 +16,10 @@ public class Tree implements Dumpable {
 
     String getHash() {
         return hash;
+    }
+
+    String fileHash(String fileName) {
+        return files.get(fileName);
     }
 
     @Override
@@ -31,5 +36,10 @@ public class Tree implements Dumpable {
             s.append(files.get(file));
         }
         return s.toString();
+    }
+
+    @Override
+    public Iterator<String> iterator() {
+        return files.keySet().iterator();
     }
 }

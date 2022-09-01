@@ -123,6 +123,18 @@ public class Repository {
         Utils.writeObject(file, object);
     }
 
+    static <T extends Serializable> T readObject(String hash, Class<T> expectedClass) {
+        String dirName = hash.substring(0, 2);
+        String fileName = hash.substring(2);
+        File dir = join(OBJECTS_DIR, dirName);
+        File file = join(dir, fileName);
+        if (!file.exists()) {
+            System.out.println(expectedClass + " " + hash + " not found");
+            System.exit(0);
+        }
+        return Utils.readObject(file, expectedClass);
+    }
+
     public static void writeFile(String hash, String fileContents) {
         String dirName = hash.substring(0, 2);
         String fileName = hash.substring(2);
@@ -131,6 +143,18 @@ public class Repository {
         File file = join(dir, fileName);
         Utils.createFile(file);
         Utils.writeContents(file, fileContents);
+    }
+
+    public static String readFile(String hash) {
+        String dirName = hash.substring(0, 2);
+        String fileName = hash.substring(2);
+        File dir = join(OBJECTS_DIR, dirName);
+        File file = join(dir, fileName);
+        if (!file.exists()) {
+            System.out.println("File " + hash + " not found");
+            System.exit(0);
+        }
+        return Utils.readContentsAsString(file);
     }
 
     public static void newBranch(String name, String commit) {
@@ -191,5 +215,50 @@ public class Repository {
         Utils.writeObject(INDEX, index);
     }
 
-    /** TODO checkout -- [file name], checkout [commit id] -- [file name], log */
+    /** TODO log, rm */
+
+    public static void checkoutCommit(String hash) {
+        // TODO check nothing changed in index
+
+        Commit commit = readObject(hash, Commit.class);
+        String treeHash = commit.getTree();
+        Tree tree = readObject(treeHash, Tree.class);
+        for (String fileName : tree) {
+            String fileHash = tree.fileHash(fileName);
+            String fileContents = readFile(fileHash);
+
+            File file = Utils.join(CWD, fileName);
+            if (file.exists()) {
+                file.delete();
+            }
+            Utils.createFile(file);
+            Utils.writeContents(file, fileContents);
+        }
+    }
+
+    public static void checkoutFile(String fileName) {
+        Index index = Utils.readObject(INDEX, Index.class);
+        String fileHash = index.getVersions(fileName)[2];
+        String fileContents = readFile(fileHash);
+        File file = Utils.join(CWD, fileName);
+        if (file.exists()) {
+            file.delete();
+        }
+        Utils.createFile(file);
+        Utils.writeContents(file, fileContents);
+    }
+
+    public static void checkoutFileFromCommit(String hash, String fileName) {
+        Commit commit = readObject(hash, Commit.class);
+        String treeHash = commit.getTree();
+        Tree tree = readObject(treeHash, Tree.class);
+        String fileHash = tree.fileHash(fileName);
+        String fileContents = readFile(fileHash);
+        File file = Utils.join(CWD, fileName);
+        if (file.exists()) {
+            file.delete();
+        }
+        Utils.createFile(file);
+        Utils.writeContents(file, fileContents);
+    }
 }

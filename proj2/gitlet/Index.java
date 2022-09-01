@@ -22,6 +22,10 @@ public class Index implements Dumpable {
         return files.keySet();
     }
 
+    public String[] getVersions(String fileName) {
+        return files.get(fileName);
+    }
+
     public boolean contains(String fileName) {
         return files.containsKey(fileName);
     }
