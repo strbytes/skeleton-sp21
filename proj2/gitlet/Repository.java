@@ -194,6 +194,8 @@ public class Repository {
         for (String fileName : tree) {
             checkoutFile(fileName);
         }
+        Index index = readObject(INDEX, Index.class);
+        index.checkout(tree);
     }
 
     /** Check out a file by name.
@@ -209,13 +211,14 @@ public class Repository {
         }
         Utils.createFile(file);
         Utils.writeContents(file, fileContents);
+        index.updateFile(fileName, fileHash);
     }
 
     /** Check out a file from a previous commit.
      *
      * Called with format 'gitlet checkout <hash> <fileName>'. */
     public static void checkoutFileFromCommit(String hash, String fileName) {
-//        hash = getFullHash(hash);
+        hash = getFullHash(hash);
         Commit commit = readObject(hash, Commit.class);
         String treeHash = commit.getTree();
         Tree tree = readObject(treeHash, Tree.class);
@@ -227,5 +230,7 @@ public class Repository {
         }
         Utils.createFile(file);
         Utils.writeContents(file, fileContents);
+        Index index = readObject(INDEX, Index.class);
+        index.updateFile(fileName, fileHash);
     }
 }

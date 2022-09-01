@@ -18,6 +18,14 @@ public class Index implements Dumpable {
         files.get(fileName)[0] = hash;
     }
 
+    public void checkout(Tree tree) {
+        files.clear();
+        for (String fileName : tree) {
+            String hash = tree.fileHash(fileName);
+            files.put(fileName, new String[] {hash, hash, hash});
+        }
+    }
+
     public Set<String> getFiles() {
         return files.keySet();
     }
