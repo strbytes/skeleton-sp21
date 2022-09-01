@@ -85,5 +85,6 @@ public class Main {
             Utils.message("Not in an initialized Gitlet directory.");
             System.exit(0);
         }
+        Repository.updateIndex();
     }
 }
