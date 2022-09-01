@@ -159,23 +159,19 @@ public class Repository {
         }
     }
 
-    public static void checkoutCommit(String hash) {
-        // TODO this should be checkout branch
-
-//        Commit commit = readObject(hash, Commit.class);
-//        String treeHash = commit.getTree();
-//        Tree tree = readObject(treeHash, Tree.class);
-//        for (String fileName : tree) {
-//            String fileHash = tree.fileHash(fileName);
-//            String fileContents = readFile(fileHash);
-//
-//            File file = Utils.join(CWD, fileName);
-//            if (file.exists()) {
-//                file.delete();
-//            }
-//            Utils.createFile(file);
-//            Utils.writeContents(file, fileContents);
-//        }
+    public static void checkoutBranch(String branchName) {
+        // TODO -- untested, cannot create new branches yet
+        if (!Arrays.asList(REFS_DIR.list()).contains(branchName)) {
+            System.out.println("Branch " + branchName + " does not exist.");
+        }
+        writeContents(HEAD, branchName);
+        String commitHash = getBranch(branchName);
+        Commit commit = readObject(commitHash, Commit.class);
+        String treeHash = commit.getTree();
+        Tree tree = readObject(treeHash, Tree.class);
+        for (String fileName : tree) {
+            checkoutFile(fileName);
+        }
     }
 
     public static void checkoutFile(String fileName) {

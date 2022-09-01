@@ -47,8 +47,7 @@ public class Main {
                 validateRepo();
                 switch(args.length) {
                     case 2:
-                        // TODO this is supposed to be checkout branch
-                        Repository.checkoutCommit(Utils.getFullHash(args[1]));
+                        Repository.checkoutBranch(Utils.getFullHash(args[1]));
                         break;
                     case 3:
                         Repository.checkoutFile(args[2]);
