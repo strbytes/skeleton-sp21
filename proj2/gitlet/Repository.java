@@ -132,8 +132,8 @@ public class Repository {
         String prevCommit = getBranch(branch);
         Index index = Utils.readObject(INDEX, Index.class);
         Tree tree = new Tree(index.getStaged());
-        writeObject(tree.getHash(), tree);
-        Commit commit = new Commit(prevCommit, tree.getHash(), message);
+        writeObject(tree.hash, tree);
+        Commit commit = new Commit(prevCommit, tree.hash, message);
         writeObject(commit.hash, commit);
         File branchFile = join(REFS_DIR, branch);
         Utils.writeContents(branchFile, commit.hash);
