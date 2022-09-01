@@ -22,8 +22,6 @@ public class Repository {
     public static final File OBJECTS_DIR = join(GITLET_DIR, "objects");
     /** References directory. */
     public static final File REFS_DIR = join(GITLET_DIR, "refs");
-    /** Branches directory. */
-    public static final File BRANCHES = join(REFS_DIR, "branches");
 
     /** The index file to keep track of the working directory. */
     public static final File INDEX = join(GITLET_DIR, "index");
@@ -37,13 +35,14 @@ public class Repository {
         }
         GITLET_DIR.mkdir();
         OBJECTS_DIR.mkdir();
-        BRANCHES.mkdirs();
+        REFS_DIR.mkdir();
         Commit initialCommit = new Commit();
         String initialCommitHash = initialCommit.getHash();
         writeObject(initialCommitHash, initialCommit);
+        String branch = newBranch("master", initialCommitHash);
         Utils.createFile(HEAD);
-        Utils.writeContents(HEAD, initialCommitHash);
-        newBranch("master", initialCommitHash);
+        // TODO -- update other methods that use HEAD to get the Branch from this
+        Utils.writeContents(HEAD, branch);
         Index index = new Index();
         Utils.writeObject(INDEX, index);
     }
@@ -79,10 +78,11 @@ public class Repository {
         System.out.println(index);
     }
 
-    public static void newBranch(String name, String commit) {
-        File branch = join(BRANCHES, name);
+    public static String newBranch(String name, String commit) {
+        File branch = join(REFS_DIR, name);
         Utils.createFile(branch);
         Utils.writeContents(branch, commit);
+        return name;
     }
 
     public static void add(String fileName) {
@@ -110,13 +110,15 @@ public class Repository {
     }
 
     public static void commit(String message) {
-        String head = Utils.readContentsAsString(HEAD);
+        String branch = Utils.readContentsAsString(HEAD);
+        String prevCommit = getBranch(branch);
         Index index = Utils.readObject(INDEX, Index.class);
         Tree tree = new Tree(index.getStaged());
         writeObject(tree.getHash(), tree);
-        Commit commit = new Commit(head, tree.getHash(), message);
+        Commit commit = new Commit(prevCommit, tree.getHash(), message);
         writeObject(commit.getHash(), commit);
-        Utils.writeContents(HEAD, commit.getHash());
+        File branchFile = join(REFS_DIR, branch);
+        Utils.writeContents(branchFile, commit.getHash());
         index.commitStaged();
         Utils.writeObject(INDEX, index);
     }
@@ -137,25 +139,28 @@ public class Repository {
         Utils.writeObject(INDEX, index);
     }
 
-    /** TODO log, rm */
+    public static String getBranch(String branchName) {
+        File branch = Utils.join(REFS_DIR, branchName);
+        return readContentsAsString(branch);
+    }
 
     public static void checkoutCommit(String hash) {
-        // TODO check nothing changed in index
+        // TODO this should be checkout branch
 
-        Commit commit = readObject(hash, Commit.class);
-        String treeHash = commit.getTree();
-        Tree tree = readObject(treeHash, Tree.class);
-        for (String fileName : tree) {
-            String fileHash = tree.fileHash(fileName);
-            String fileContents = readFile(fileHash);
-
-            File file = Utils.join(CWD, fileName);
-            if (file.exists()) {
-                file.delete();
-            }
-            Utils.createFile(file);
-            Utils.writeContents(file, fileContents);
-        }
+//        Commit commit = readObject(hash, Commit.class);
+//        String treeHash = commit.getTree();
+//        Tree tree = readObject(treeHash, Tree.class);
+//        for (String fileName : tree) {
+//            String fileHash = tree.fileHash(fileName);
+//            String fileContents = readFile(fileHash);
+//
+//            File file = Utils.join(CWD, fileName);
+//            if (file.exists()) {
+//                file.delete();
+//            }
+//            Utils.createFile(file);
+//            Utils.writeContents(file, fileContents);
+//        }
     }
 
     public static void checkoutFile(String fileName) {
