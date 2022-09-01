@@ -26,7 +26,7 @@ public class Commit implements Dumpable {
         this.parent = parent;
         this.tree = tree;
         this.message = message;
-        timestamp = new Date().toString();
+        timestamp = String.format("%1$ta %1$tb %1$td %1$tH:%1$tM:%1$tS %1$tY %1$tz", new Date());
         hash = Utils.sha1(parent, tree, message, timestamp);
     }
 
