@@ -1,7 +1,6 @@
 package gitlet;
 
 import java.io.File;
-import java.io.Serializable;
 
 import static gitlet.Utils.*;
 
@@ -75,86 +74,9 @@ public class Repository {
         }
     }
 
-    static String getFullHash(String partial) {
-        String hashDirName = null;
-        String hashFile = null;
-        for (String dir: OBJECTS_DIR.list()) {
-            if (dir.equals(partial.substring(0, 2))) {
-                hashDirName = dir;
-                break;
-            }
-        }
-
-        if (hashDirName != null) {
-            File hashDir = join(OBJECTS_DIR, hashDirName);
-            String[] objects = hashDir.list((dir, name) ->
-                    name.substring(0, partial.length() - 2).equals(partial.substring(2)));
-
-            switch (objects.length) {
-                case 0:
-                    Utils.message("Object not found.");
-                    System.exit(0);
-                    break;
-                case 1:
-                    hashFile = objects[0];
-                    break;
-                default:
-                    Utils.message("Ambiguous argument.");
-            }
-        } else {
-            Utils.message("Object not found.");
-            System.exit(0);
-        }
-        return hashDirName + hashFile;
-    }
-
     public static void lsFiles() {
         Index index = Utils.readObject(INDEX, Index.class);
         System.out.println(index);
-    }
-
-    public static void writeObject(String hash, Serializable object) {
-        String dirName = hash.substring(0, 2);
-        String fileName = hash.substring(2);
-        File dir = join(OBJECTS_DIR, dirName);
-        dir.mkdir();
-        File file = join(dir, fileName);
-        Utils.createFile(file);
-        Utils.writeObject(file, object);
-    }
-
-    static <T extends Serializable> T readObject(String hash, Class<T> expectedClass) {
-        String dirName = hash.substring(0, 2);
-        String fileName = hash.substring(2);
-        File dir = join(OBJECTS_DIR, dirName);
-        File file = join(dir, fileName);
-        if (!file.exists()) {
-            System.out.println(expectedClass + " " + hash + " not found");
-            System.exit(0);
-        }
-        return Utils.readObject(file, expectedClass);
-    }
-
-    public static void writeFile(String hash, String fileContents) {
-        String dirName = hash.substring(0, 2);
-        String fileName = hash.substring(2);
-        File dir = join(OBJECTS_DIR, dirName);
-        dir.mkdir();
-        File file = join(dir, fileName);
-        Utils.createFile(file);
-        Utils.writeContents(file, fileContents);
-    }
-
-    public static String readFile(String hash) {
-        String dirName = hash.substring(0, 2);
-        String fileName = hash.substring(2);
-        File dir = join(OBJECTS_DIR, dirName);
-        File file = join(dir, fileName);
-        if (!file.exists()) {
-            System.out.println("File " + hash + " not found");
-            System.exit(0);
-        }
-        return Utils.readContentsAsString(file);
     }
 
     public static void newBranch(String name, String commit) {

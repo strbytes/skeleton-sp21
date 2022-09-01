@@ -30,7 +30,7 @@ public class Main {
                 validateNumArgs(args, 3, 3);
                 validateRepo();
                 String type = args[1];
-                Repository.catFile(type, Repository.getFullHash(args[2]));
+                Repository.catFile(type, Utils.getFullHash(args[2]));
                 break;
             case "ls-files":
                 validateNumArgs(args, 1, 1);
@@ -48,7 +48,7 @@ public class Main {
                 switch(args.length) {
                     case 2:
                         // TODO this is supposed to be checkout branch
-                        Repository.checkoutCommit(Repository.getFullHash(args[1]));
+                        Repository.checkoutCommit(Utils.getFullHash(args[1]));
                         break;
                     case 3:
                         Repository.checkoutFile(args[2]);
