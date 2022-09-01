@@ -1,7 +1,7 @@
 package gitlet;
 
 /** Driver class for Gitlet, a subset of the Git version-control system.
- *  @author TODO
+ *  @author strbytes
  */
 public class Main {
 
@@ -22,29 +22,29 @@ public class Main {
                 break;
             case "add":
                 validateNumArgs(args, 2, 2);
-                validateRepo();
+                validateAndUpdateRepo();
                 String fileName = args[1];
                 Repository.add(fileName);
                 break;
             case "cat-file":
                 validateNumArgs(args, 3, 3);
-                validateRepo();
+                validateAndUpdateRepo();
                 String type = args[1];
                 Repository.catFile(type, Utils.getFullHash(args[2]));
                 break;
             case "ls-files":
                 validateNumArgs(args, 1, 1);
-                validateRepo();
+                validateAndUpdateRepo();
                 Repository.lsFiles();
                 break;
             case "commit":
                 validateNumArgs(args, 2, 2);
-                validateRepo();
+                validateAndUpdateRepo();
                 Repository.commit(args[1]);
                 break;
             case "checkout":
                 validateNumArgs(args, 2, 4);
-                validateRepo();
+                validateAndUpdateRepo();
                 switch(args.length) {
                     case 2:
                         Repository.checkoutBranch(Utils.getFullHash(args[1]));
@@ -69,6 +69,8 @@ public class Main {
         }
     }
 
+    /** Checks that Gitlet commands are called with an appropriate number of arguments.
+     * Exits the program if the check fails. */
     public static void validateNumArgs(String[] args, int min, int max) {
         if (args.length < min || args.length > max) {
             Utils.message("Incorrect operands.");
@@ -78,11 +80,10 @@ public class Main {
 
     /** Ensure program is being run in a valid Gitlet directory. Update any
      * changes to the working directory in the index. */
-    public static void validateRepo() {
+    public static void validateAndUpdateRepo() {
         if (!Repository.GITLET_DIR.exists()) {
             Utils.message("Not in an initialized Gitlet directory.");
             System.exit(0);
         }
-        Repository.updateIndex();
     }
 }
